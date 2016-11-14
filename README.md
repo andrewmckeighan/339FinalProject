@@ -8,7 +8,10 @@ This app will feature three sections:
   and a server to communicate between the desktop application and the client app. 
 
 Developers:
-Wesley Vansteenburg
-Andrew McKeighan
-Josh Engelhardt
+
+    Wesley Vansteenburg
+
+    Andrew McKeighan
+
+    Josh Engelhardt
 
