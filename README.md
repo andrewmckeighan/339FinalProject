@@ -9,9 +9,9 @@ This app will feature three sections:
 
 Developers:
 
-    Wesley Vansteenburg
+Wesley Vansteenburg
 
-    Andrew McKeighan
+Andrew McKeighan
 
-    Josh Engelhardt
+Josh Engelhardt
 
