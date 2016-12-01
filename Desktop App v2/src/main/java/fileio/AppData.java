@@ -1,6 +1,7 @@
 package fileio;
 
 import com.google.gson.Gson;
+import data.Batch;
 import data.Question;
 import fileio.net.Connection;
 
@@ -17,38 +18,50 @@ public class AppData {
     public Connection client;
 
     private AppData() {
-        try {
+        /*try {
             client = new Connection(new URI("ws://localhost:80"));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        client.connect();
+        client.connect();*/
     }
 
-    public static AppData request() {
+    public static AppData send() {
         return singleton;
     }
 
-    public void sessionKey(SessionKeyHandler callback) {
-        //TODO
-        client.send("test");
-        callback.handleSessionKeyResult(null);
+    public void serverRequest(Batch serverData, Callback callback, int type) {
+
     }
 
-    public void askQuestion(Question ques, AskQuestionResultHandler callback) {
-        //TODO
+    public void localRequest(Batch serverData, Callback callback, int type) {
+        switch(type) {
+            case Local.LOAD_FILE:
+                //TODO
+                break;
+            case Local.SAVE_FILE:
+                //TODO
+                break;
+            case Local.SAVE_PROJECT_FILE:
+                //TODO
+                break;
+            case Local.LOAD_PROJECT_FILE:
 
-        callback.handleAskingAQuestion(false);
+                break;
+            default:
+                throw new IllegalArgumentException("Local Request #"+type+" is not a recognized request.");
+        }
     }
 
 
-    public interface CallbackHandler{}
-
-    public interface SessionKeyHandler extends CallbackHandler {
-        void handleSessionKeyResult(String key);
+    public interface Callback {
+        void handle(int type, Batch response);
     }
 
-    public interface AskQuestionResultHandler extends CallbackHandler{
-        void handleAskingAQuestion(boolean serverResult);
+    public class Local {
+        public static final int SAVE_FILE = 1;
+        public static final int LOAD_FILE = 2;
+        public static final int SAVE_PROJECT_FILE = 3;
+        public static final int LOAD_PROJECT_FILE = 4;
     }
 }

@@ -1,11 +1,13 @@
 package data;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
  * Created by Squiggs on 11/28/2016.
  */
-public class Question {
+public class Question implements Serializable{
     String question;
 
     private ArrayList<String> answers;
@@ -36,5 +38,10 @@ public class Question {
 
     public void editAnswer(int location, String newAnswer) {
         this.answers.set(location, newAnswer);
+    }
+
+    @Override
+    public String toString() {
+        return question + ": " + answers.toString();
     }
 }
