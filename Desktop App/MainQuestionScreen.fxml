@@ -30,7 +30,7 @@
                         <Insets />
                      </opaqueInsets>
                   </HBox>
-                  <TitledPane text="1 Answers" VBox.vgrow="SOMETIMES">
+                  <TitledPane text="0 Answers" VBox.vgrow="SOMETIMES">
                      <content>
                         <VBox prefHeight="105.0" prefWidth="301.0">
                            <children>
@@ -42,7 +42,7 @@
                   </TitledPane>
                </children>
             </VBox>
-            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-border-style: solid;">
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                <children>
                   <HBox style="-fx-padding: 5 2 5 2;" VBox.vgrow="NEVER">
                      <children>
@@ -77,7 +77,7 @@
             </VBox>
             <VBox>
                <children>
-                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-border-style: solid;">
+                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
                         <HBox style="-fx-padding: 5 2 5 2;" VBox.vgrow="NEVER">
                            <children>
@@ -110,7 +110,7 @@
                         </TitledPane>
                      </children>
                   </VBox>
-                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-border-style: solid;">
+                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
                         <HBox style="-fx-padding: 5 2 5 2;" VBox.vgrow="NEVER">
                            <children>

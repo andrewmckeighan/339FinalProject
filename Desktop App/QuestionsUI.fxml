@@ -29,7 +29,7 @@
             <Insets />
          </opaqueInsets>
       </HBox>
-      <TitledPane expanded="false" text="3 Answers" VBox.vgrow="SOMETIMES">
+      <TitledPane text="3 Answers" VBox.vgrow="SOMETIMES">
          <content>
             <VBox prefHeight="105.0" prefWidth="301.0">
                <children>
