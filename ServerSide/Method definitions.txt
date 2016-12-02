@@ -1,0 +1,10 @@
+getKey: will return a new key
+	no paramaters
+	
+submitQA:
+	data.key 		- string 		//This is the key used to identify which session you're a part of.
+	data.question 	- string 		//This is the question
+	data.answers 	- string array 	//This is all the answers
+	
+getQA:
+	data 			- string //This is the key
