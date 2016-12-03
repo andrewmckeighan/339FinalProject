@@ -12,20 +12,31 @@ import java.io.*;
  * This class was designed to allow a user to easily create and modify this class to be any file chooser for any implementation.
  * It also narrows down exactly what our project needs by only having methods that are necessary. Other methods are hidden.
  *
- * Also, this class restricts the opening and saving of files to only be serialized Batch objects
+ * Also, this class restricts the opening and saving of files to only  Batch objects
  */
 public class FileChooserBuilder {
 
     private FileChooser fc;
 
+    /**
+     * Initialize the FileChooser to its default values
+     * Title: "File Chooser"
+     * Initial Directory: user.home
+     * Initial File Name: Untitled
+     */
     public FileChooserBuilder() {
         fc = new FileChooser();
         title("File Chooser");
         initialDirectory(new File(System.getProperty("user.home")));
         initialFileName("Untitled");
-        fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Project File", "*.qab"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Project File", "*.qab"));
     }
 
+    /**
+     * Opens a *.qab file and returns the batch object stored inside. This method will block the thread until a file has been chosen.
+     * @param context a javafx ui environment to open the dialogue
+     * @return the batch file stored in a file of the users choice, null otherwise
+     */
     public Batch openAFile(Stage context) {
         File saveLocation = fc.showOpenDialog(context);
 
@@ -85,11 +96,11 @@ public class FileChooserBuilder {
         return this;
     }
 
-    @Deprecated
+    /*@Deprecated THIS IS NO LONGER SUPPORTED IN THE OFFICIAL RELEASE. ONLY THE SAVING/LOADING TO THE SPECIFIC FILE TYPE WILL BE ALLOWED
     public FileChooserBuilder extension(FileChooser.ExtensionFilter... filters) {
         fc.getExtensionFilters().addAll(filters);
         return this;
-    }
+    }*/
 
     public FileChooserBuilder initialFileName(String name) {
         fc.setInitialFileName(name);

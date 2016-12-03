@@ -20,12 +20,13 @@ public class MainView extends Application{
                         .putString("MyName", "Wes")
                         .putInteger("myAge", 21)
                         .putDouble("My weight", 160.2))
-                .putString(AppData.Local.DIALOGUE_TITLE, "Save a file")
-                .put(AppData.Local.DIALOGUE_INITIAL_DIR, new File("C:\\Users\\Squiggs\\Documents\\GitHub\\339FinalProject\\Desktop App"));
-
+                .putBatch(AppData.Local.DIALOGUE_DATA, new Batch()
+                    .putString(AppData.Local.DIALOGUE_TITLE, "Save a file")
+                    .put(AppData.Local.DIALOGUE_INITIAL_DIR, new File("C:\\Users\\Squiggs\\Documents\\GitHub\\339FinalProject\\Desktop App"))
+                );
         System.out.println("Before Call");
-        //AppData.send().localRequest(openFile, primaryStage, new MainTemo(), AppData.Local.LOAD_FILE);
-        AppData.send().localRequest(saveFile, primaryStage, new MainTemo(), AppData.Local.SAVE_FILE);
+        AppData.send().localRequest(openFile, primaryStage, new MainTemo(), AppData.Local.LOAD_FILE);
+        //AppData.send().localRequest(saveFile, primaryStage, new MainTemo(), AppData.Local.SAVE_FILE);
 
         System.out.println("After call");
 
