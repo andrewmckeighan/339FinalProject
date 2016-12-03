@@ -12,6 +12,8 @@ public class Question implements Serializable{
 
     private ArrayList<String> answers;
 
+    public static final long serialVersionUID = 7923005923l;
+
     public Question() {
         question = "";
         answers = new ArrayList<String>(5);

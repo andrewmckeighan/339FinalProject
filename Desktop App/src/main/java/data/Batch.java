@@ -6,10 +6,18 @@ import java.util.HashMap;
 /**
  * Created by Squiggs on 12/1/2016.
  */
-public class Batch extends HashMap<String, Serializable>{
+public class Batch extends HashMap<String, Serializable> implements Serializable{
 
-    public void putString(String key, String str){
+    public static final long serialVersionUID = 4637745574l;
+
+    public Batch put(String key, Serializable s) {
+        super.put(key, s);
+        return this;
+    }
+
+    public Batch putString(String key, String str){
         put(key, str);
+        return this;
     }
 
     public String getString(String key){
@@ -19,8 +27,9 @@ public class Batch extends HashMap<String, Serializable>{
         return null;
     }
 
-    public void putInteger(String key, int anInt){
-        put(key, new Integer(anInt));
+    public Batch putInteger(String key, int anInt){
+        put(key, anInt);
+        return this;
     }
 
     public Integer getInteger(String key){
@@ -30,8 +39,9 @@ public class Batch extends HashMap<String, Serializable>{
         return null;
     }
 
-    public void putDouble(String key, float aDouble){
-        put(key, new Float(aDouble));
+    public Batch putDouble(String key, double aDouble){
+        put(key, aDouble);
+        return this;
     }
 
     public Double getDouble(String key){
@@ -41,8 +51,9 @@ public class Batch extends HashMap<String, Serializable>{
         return null;
     }
 
-    public void putBoolean(String key, boolean aBoolean){
-        put(key, new Boolean(aBoolean));
+    public Batch putBoolean(String key, boolean aBoolean){
+        put(key, aBoolean);
+        return this;
     }
 
     public Boolean getBoolean(String key){
@@ -52,14 +63,27 @@ public class Batch extends HashMap<String, Serializable>{
         return null;
     }
 
-    public void putQuestion(String key, Question aQuestion){
+    public Batch putQuestion(String key, Question aQuestion){
         put(key, aQuestion);
+        return this;
     }
 
     public Question getQuestion(String key){
         Object o = get(key);
         if(o!=null && o instanceof Question)
             return (Question) o;
+        return null;
+    }
+
+    public Batch putBatch(String key, Batch aBatch) {
+        put(key, aBatch);
+        return this;
+    }
+
+    public Batch getBatch(String key) {
+        Serializable o = get(key);
+        if(o != null && o instanceof Batch)
+            return (Batch) o;
         return null;
     }
 
