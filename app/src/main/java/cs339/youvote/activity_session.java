@@ -20,8 +20,11 @@ public class activity_session extends AppCompatActivity {
 
     }
 
-    public void getQuestions(){ //Gets the arrays of questions to put into the scrollview
+    public void setQuestions(String question, String[] answers){ //Sets the arrays of questions to put into the scrollview
         //TODO
+        
+
+
     }
 
     public void castVote(){ //Sends users answers to the server
