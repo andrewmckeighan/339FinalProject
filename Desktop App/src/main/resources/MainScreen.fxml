@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: url(C:\Users\Squiggs\Documents\GitHub\339FinalProject\Desktop App\src\main\resources\questions-and-answers-main-screen.jpg); -fx-background-position: center center; -fx-background-repeat: stretch;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <VBox prefHeight="200.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" text="New Project" />
+            <Button mnemonicParsing="false" text="Open Project" />
+         </children>
+      </VBox>
+   </center>
+   <bottom>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Authors:" />
+            <Label text="Wesley Vansteenburg" />
+            <Label text="Andrew Mekegan" />
+            <Label text="Label" />
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>

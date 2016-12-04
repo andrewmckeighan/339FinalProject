@@ -4,6 +4,7 @@ import data.Batch;
 import data.Question;
 import sun.applet.Main;
 import ui.main.MainView;
+import ui.start.StartView;
 
 import java.io.File;
 
@@ -16,7 +17,7 @@ public class MainTemo implements AppData.Callback {
 
         Batch openFile = new Batch();
 
-        MainView.launch(MainView.class);
+        StartView.launch(StartView.class);
 
         /*
         exampleData.putString("Project Name", "Stupid Questions");
