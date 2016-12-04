@@ -96,9 +96,9 @@ public class AppData {
 
         //Get the initial directory, if available
         {
-            Object initialDir = data.get(Local.DIALOGUE_INITIAL_DIR);
-            if (initialDir instanceof File)
-                files.initialDirectory((File) initialDir);
+            File initialDir = data.getFile(Local.DIALOGUE_INITIAL_DIR);
+            if (initialDir != null)
+                files.initialDirectory(initialDir);
         }
 
         //Get the initial file name, if available
@@ -109,13 +109,7 @@ public class AppData {
         }
     }
 
-    private boolean instanceofStringList(List<?> filters) {
-        for(Object o: filters) {
-            if(!(o instanceof String))
-                return false;
-        }
-        return true;
-    }
+
 
 
     public interface Callback {

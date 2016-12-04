@@ -1,8 +1,12 @@
 package ui.start;
 
 import data.Batch;
+import data.Project;
+import javafx.application.Platform;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import ui.main.MainView;
 
 /**
  * Created by Squiggs on 11/28/2016.
@@ -28,11 +32,35 @@ public class StartModel {
         return stage;
     }
 
+    public void createProject() {
+        openNextWindow(new Project());
+    }
 
 
-    public void loadMainUI(Batch project) {
-        
+    public void openProject(Batch project) {
+        if(!Project.verifyProjectStructure(project)) {
+            openNextWindow(new Project(project));
+        } else {
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Project could not be loaded...");
+           alert.setHeaderText(null);
+           alert.setContentText("The project selected is either corrupt or out of date.\nPlease update project file before continuing.");
+           alert.show();
+        }
+    }
 
-        stage.close();
+    private void openNextWindow(final Project project) {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                try {
+                    new MainView(project).start(new Stage());
+
+                    stage.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Failed...");
+                }
+            }
+        });
     }
 }

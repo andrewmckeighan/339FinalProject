@@ -1,5 +1,7 @@
 package ui.main;
 
+import data.Batch;
+import data.Project;
 import javafx.stage.Stage;
 
 /**
@@ -8,6 +10,7 @@ import javafx.stage.Stage;
 public class MainModel {
     Stage stage;
     MainView ui;
+    public Project project_settings;
 
     public MainModel(MainView mainView) {
         ui = mainView;

@@ -1,5 +1,6 @@
 package data;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -87,5 +88,16 @@ public class Batch extends HashMap<String, Serializable> implements Serializable
         return null;
     }
 
+    public Batch putFile(String key, File aFile) {
+        put(key, aFile);
+        return this;
+    }
+
+    public File getFile(String key) {
+        Serializable o = get(key);
+        if(o != null && o instanceof File)
+            return (File) o;
+        return null;
+    }
 
 }

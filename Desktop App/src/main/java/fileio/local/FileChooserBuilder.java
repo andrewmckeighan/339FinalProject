@@ -38,7 +38,12 @@ public class FileChooserBuilder {
      * @return the batch file stored in a file of the users choice, null otherwise
      */
     public Batch openAFile(Stage context) {
-        File saveLocation = fc.showOpenDialog(context);
+        File saveLocation = null;
+
+        //This try/catch block was added just in case the user selects an invalid file (Like a shortcut)
+        try {
+            saveLocation = fc.showOpenDialog(context);
+        } catch(Exception e) { e.printStackTrace(); }
 
         if(saveLocation == null)
             return null;
@@ -68,8 +73,12 @@ public class FileChooserBuilder {
      * @return true if the file was saved, or false if the file wasn't saved
      */
     public boolean saveAFile(Batch saveData, Stage context) {
-        File saveLocation = fc.showSaveDialog(context);
+        File saveLocation = null;
 
+        //This try/catch block was added just in case the user selects an invalid file (Like a shortcut).
+        try {
+            saveLocation = fc.showSaveDialog(context);
+        } catch(Exception e) { e.printStackTrace(); }
         if(saveLocation == null)
             return false;
 

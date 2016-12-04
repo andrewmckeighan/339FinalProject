@@ -1,5 +1,8 @@
 package ui.main;
 
+import data.Batch;
+import data.Project;
+import fileio.AppData;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -8,7 +11,18 @@ import javafx.stage.Stage;
  */
 public class MainView extends Application {
     MainModel model = new MainModel(this);
+    MainController controller = new MainController(model);
+
+    public MainView(Project project) {
+        model.project_settings = project;
+    }
+
     public void start(Stage primaryStage) throws Exception {
+        System.out.println("This is the main stage");
+        System.out.println(model.project_settings.toString());
+
+        AppData.send().localRequest(new Batch().putBatch(AppData.Local.SAVE_DATA, model.project_settings.toBatch()), primaryStage, controller, AppData.Local.SAVE_FILE);
+
         primaryStage.show();
     }
 }

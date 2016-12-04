@@ -1,6 +1,7 @@
 package ui.start;
 
 import data.Batch;
+import data.Project;
 import fileio.AppData;
 import javafx.scene.Parent;
 
@@ -22,8 +23,8 @@ public class StartController implements AppData.Callback{
     void process(int buttonPressed) {
         switch(buttonPressed) {
             case NEW_PROJECT:
-                //TODO, create a new project
                 System.out.println("Create new project called");
+                ui.createProject();
                 break;
             case LOAD_PROJECT:
                 System.out.println("Load project called");
@@ -44,7 +45,7 @@ public class StartController implements AppData.Callback{
         if(type == AppData.Local.LOAD_FILE) {
             if(response != null) {
                 System.out.println(response.toString());
-                ui.loadMainUI(response);
+                ui.openProject(response);
                 return;
             }
         }
