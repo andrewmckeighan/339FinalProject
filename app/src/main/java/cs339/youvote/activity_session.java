@@ -64,9 +64,13 @@ public class activity_session extends AppCompatActivity {
         final LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         final RadioButton button = new RadioButton(this);
         button.setLayoutParams(lparams);
-        button.setText(question);
+        button.setText(" "+ question);
         button.setTextSize(32);
         button.setId(btnId);
+        button.setButtonDrawable(android.R.color.transparent);
+//        button.setBackgroundColor(Color.TRANSPARENT);
+        //button.getBackground().setAlpha(80);
+        button.setBackgroundResource(R.drawable.buttonbackground);
         button.setTextColor(Color.BLACK);
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
