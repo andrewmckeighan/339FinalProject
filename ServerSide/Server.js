@@ -126,13 +126,10 @@ var getQA = function(key){
 
 //---------------------Websocket stuff--------------------------
 //Socket routes
-io.on('connection', function (socket) {
-    socket.emit('receiveQA', news);
-	socket.emit('receiveSongs', songs); 
-	
+io.on('connection', function (socket) {	
 	
 	socket.on('getKey', function(){
-        getKey();
+        socket.emit('sendKey', generatekey());
     });
 	
 	socket.on('submitQA', function(data){
@@ -142,4 +139,7 @@ io.on('connection', function (socket) {
     socket.on('getQA', function(data){
         getQA(data);
     });
+	//Android user sends key.
+	//Push questions to android user.
+	//Set up rooms.
 }
