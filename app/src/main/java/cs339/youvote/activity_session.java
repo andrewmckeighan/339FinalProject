@@ -1,20 +1,26 @@
 package cs339.youvote;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.constraint.ConstraintLayout;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat.*;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.view.View.OnClickListener;
+
 
 public class activity_session extends AppCompatActivity {
 
     private LinearLayout mLayout;
-
+    private int qIdNum = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +39,14 @@ public class activity_session extends AppCompatActivity {
 
     public void setQuestions(String question, String[] answers){ //Sets the arrays of questions to put into the scrollview
         //TODO
-        mLayout.addView(createNewTextView(question));
-        for(int i = 0; i < answers.length; i++){
-            mLayout.addView(createNewQuestions(answers[i]));
-        }
 
+        mLayout.addView(createNewTextView(question));
+        RadioGroup RG = new RadioGroup(this);
+        for(int i = 0; i < answers.length; i++){
+            RG.addView(createNewQuestions(answers[i], ((qIdNum*10)+i)));
+        }
+        mLayout.addView(RG);
+        qIdNum++;
     }
 
     private TextView createNewTextView(String text) {
@@ -46,16 +55,24 @@ public class activity_session extends AppCompatActivity {
         textView.setLayoutParams(lparams);
         textView.setText(text);
         textView.setTextSize(32);
+        textView.setTextColor(Color.BLACK);
         return textView;
     }
 
-    private TextView createNewQuestions(String question) {
+    private Button createNewQuestions(String question, final int btnId) {
         LinearLayout layout = (LinearLayout) findViewById(R.id.scrollLayout);
         final LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        final Button button = new Button(this);
+        final RadioButton button = new RadioButton(this);
         button.setLayoutParams(lparams);
         button.setText(question);
         button.setTextSize(32);
+        button.setId(btnId);
+        button.setTextColor(Color.BLACK);
+        button.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                //TODO
+            }
+        });
         //button.setWidth(layout.getWidth());
         return button;
     }
