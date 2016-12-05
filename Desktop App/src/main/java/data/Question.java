@@ -1,4 +1,8 @@
 package data;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +44,20 @@ public class Question implements Serializable{
 
     public void editAnswer(int location, String newAnswer) {
         this.answers.set(location, newAnswer);
+    }
+
+    public static JSONObject toJSON(Question question) throws JSONException {
+        JSONObject json = new JSONObject();
+
+            json.put("Question", question.question);
+            JSONObject answerArray = new JSONObject();
+            for(int x = 0; x < question.answers.size(); x++) {
+                answerArray.put(""+(x+1), question.answers.get(1));
+            }
+            json.put("Answers", answerArray);
+
+
+        return json;
     }
 
     @Override

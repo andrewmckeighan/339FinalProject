@@ -2,12 +2,10 @@ package fileio;
 
 import data.Batch;
 import fileio.local.FileChooserBuilder;
-import fileio.net.Connection;
-import javafx.stage.FileChooser;
+import fileio.net.SocketConnection;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Created by Squiggs on 11/28/2016.
@@ -16,25 +14,47 @@ public class AppData {
 
     private final static AppData singleton = new AppData();
 
-    public Connection client;
     private FileChooserBuilder files;
-
+    private SocketConnection server;
 
     private AppData() {
-        /*try {
-            client = new Connection(new URI("ws://localhost:80"));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        client.connect();*/
+
     }
 
     public static AppData send() {
         return singleton;
     }
 
-    public void serverRequest(Batch serverData, Callback callback, int type) {
+    public void serverRequest(int type, Batch serverData) throws IllegalStateException{
+        switch(type) {
+            case Server.SESSION_KEY:
+                server.connect();
+                server.emit(SocketConnection.REQUEST_SESSION_KEY, null);
+                break;
+            case Server.ASK_QUESTION:
+                if(server.isConnected()) {
+                    //TODO: Verify Serverdata only has one connection object
 
+                    server.emit(SocketConnection.ASK_A_QUESTION, serverData);
+                }else
+                    throw new IllegalStateException("You have not connected. Please create a session key first.");
+                break;
+            case Server.END_QUESTION:
+                if(server.isConnected())
+                    server.emit(SocketConnection.RESOLVE_A_QUESTION, null);
+                else
+                    throw new IllegalStateException("You have not connected. Please create a session key first.");
+                break;
+            case Server.CONNECT:
+                server.connect();
+                break;
+            case Server.DISCONNECT:
+                server.disconnect();
+                break;
+        }
+    }
+    public void subscribeToServerRersponse(String serverEventName, Server.Listener listener) {
+        server.on(serverEventName, listener);
     }
 
     /**
@@ -160,5 +180,21 @@ public class AppData {
          * This is not mandatory, but if not, a default value will be used.
          */
         public static final String DIALOGUE_INITIAL_FILE_NAME = "eO0Euvum1w";
+    }
+
+    public static class Server {
+        public static final int SESSION_KEY = 1;
+        public static final int ASK_QUESTION = 2;
+        public static final int END_QUESTION = 3;
+        public static final int DISCONNECT = 4;
+        public static final int CONNECT = 5;
+
+        public interface Listener extends SocketConnection.Listener{}
+
+        public static final String RECEIVE_SESSION_KEY = SocketConnection.GET_SESSION_KEY;
+        public static final String RECEIVE_SENT_QA_CONFIRMATION = SocketConnection.GET_ASK_CONFIRMATION;
+        public static final String RECEIVE_RESULTS = SocketConnection.GET_RESULTS;
+
+
     }
 }

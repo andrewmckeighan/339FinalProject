@@ -13,11 +13,10 @@ import java.io.File;
  */
 public class MainTemo implements AppData.Callback {
     public static void main(String[] args) {
-        Batch exampleData = new Batch();
-
-        Batch openFile = new Batch();
-
-        StartView.launch(StartView.class);
+        int i = 0;
+        while(true)
+            i++;
+//        StartView.launch(StartView.class);
 
         /*
         exampleData.putString("Project Name", "Stupid Questions");
