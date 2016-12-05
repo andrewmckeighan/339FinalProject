@@ -4,6 +4,7 @@ import data.Batch;
 import fileio.local.FileChooserBuilder;
 import fileio.net.SocketConnection;
 import javafx.stage.Stage;
+import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -41,7 +42,7 @@ public class AppData {
         switch(type) {
             case Server.Request.SESSION_KEY:
                 if(server.isConnected()) {
-                    server.emit(SocketConnection.REQUEST_SESSION_KEY, null);
+                    server.emit(SocketConnection.REQUEST_SESSION_KEY, serverData);
                     return true;
                 } else {
                     throw new IllegalStateException("You have not connected. Please create a connect first.");
@@ -59,7 +60,7 @@ public class AppData {
                 //break;
             case Server.Request.END_QUESTION:
                 if(server.isConnected()) {
-                    server.emit(SocketConnection.RESOLVE_A_QUESTION, null);
+                    server.emit(SocketConnection.RESOLVE_A_QUESTION, serverData);
                     return true;
                 }
                 else {
@@ -70,9 +71,11 @@ public class AppData {
                 try {
                     //TODO allow custom connections
                     server = new SocketConnection();
-                    this.subscribeToServerRersponse(Server.Response.RECEIVE_SESSION_KEY, new Server.Response.Listener() {
-                        public void call(Batch object) {
-                            serverKey = object.getString(Server.Response.Data.SESSION_KEY);
+                    this.subscribeToServerResponse(Server.Response.RECEIVE_SESSION_KEY, new Callback() {
+                        public void handle(int type, Batch response) {
+                            if(type != Server.Response.RECEIVE_SESSION_KEY)
+                                new InvalidStateException("Type " + type + " is not receive session key").printStackTrace();
+                            serverKey = response.getString(Server.Response.Data.SESSION_KEY);
                         }
                     });
                     server.connect();
@@ -82,14 +85,35 @@ public class AppData {
                 }
                 //break;
             case Server.Request.DISCONNECT:
-                server.disconnect();
+                server.disconnect(serverData);
                 return true;
                 //break;
         }
         return false;
     }
-    public void subscribeToServerRersponse(String serverEventName, Server.Response.Listener listener) {
-        server.on(serverEventName, listener);
+
+    public void subscribeToServerResponse(final int serverEventType, final AppData.Callback listener) {
+        String serverEventName;
+        switch(serverEventType) {
+            case Server.Response.RECEIVE_SESSION_KEY:
+                serverEventName = SocketConnection.GET_SESSION_KEY;
+                break;
+            case Server.Response.RECEIVE_SENT_QA_CONFIRMATION:
+                serverEventName = SocketConnection.GET_ASK_CONFIRMATION;
+                break;
+            case Server.Response.RECEIVE_RESULTS:
+                serverEventName = SocketConnection.GET_RESULTS;
+                break;
+            default:
+                throw new IllegalArgumentException("Server Event Type invalid.");
+
+        }
+
+        server.on(serverEventName, new SocketConnection.Listener() {
+            public void call(Batch object) {
+                listener.handle(serverEventType, object);
+            }
+        });
     }
 
     /**
@@ -251,8 +275,10 @@ public class AppData {
             public static final int DISCONNECT = 4;
             public static final int CONNECT = 5;
 
-            public static final String QUESTION = "5weDOw6jkP";
-            public static final String KEY = "EcIc5CrEDz";
+            public static class Data {
+                public static final String QUESTION = "5weDOw6jkP";
+                public static final String KEY = "EcIc5CrEDz";
+            }
         }
 
         /**
@@ -260,11 +286,10 @@ public class AppData {
          * This class is juts a mirror of SocketConnection's constants. They are put here so other files don't have to import SocketConnections
          */
         public static class Response {
-            public interface Listener extends SocketConnection.Listener{}
 
-            public static final String RECEIVE_SESSION_KEY = SocketConnection.GET_SESSION_KEY;
-            public static final String RECEIVE_SENT_QA_CONFIRMATION = SocketConnection.GET_ASK_CONFIRMATION;
-            public static final String RECEIVE_RESULTS = SocketConnection.GET_RESULTS;
+            public static final int RECEIVE_SESSION_KEY = 0;
+            public static final int RECEIVE_SENT_QA_CONFIRMATION = 1;
+            public static final int RECEIVE_RESULTS = 2;
 
             /**
              * This nested class deals with the values in a received Batch file from a response.

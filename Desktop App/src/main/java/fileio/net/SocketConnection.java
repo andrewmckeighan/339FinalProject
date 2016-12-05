@@ -1,12 +1,16 @@
 package fileio.net;
 
 import data.Batch;
+import data.Question;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.net.URISyntaxException;
+import java.util.Iterator;
 
 /**
  * Created by Squiggs on 12/4/2016.
@@ -18,6 +22,7 @@ public class SocketConnection {
     public static final String REQUEST_SESSION_KEY = "getKey";
     public static final String ASK_A_QUESTION = "submitQA";
     public static final String RESOLVE_A_QUESTION = "getQA";
+    private static final String CLOSE = "close";
 
     //The server response values
     public static final String GET_SESSION_KEY = "sendKey";
@@ -50,7 +55,7 @@ public class SocketConnection {
         conn.on(eventName, new Emitter.Listener() {
             public void call(Object... objects) {
                 if(objects.length > 1 && objects[0] instanceof JSONObject)
-                    listener.call(JSONtoBatch((JSONObject)objects[0]));
+                    listener.call(JSONtoBatch((JSONObject)objects[0], new Batch()));
                 else
                     listener.call(null);
             }
@@ -61,7 +66,7 @@ public class SocketConnection {
 
     public SocketConnection emit(String eventName, Batch data) {
         if(data != null)
-            conn.emit(eventName, BatchToJSON(data));
+            conn.emit(eventName, BatchToJSON(data, new JSONObject()));
         else
             conn.emit(eventName);
         return this;
@@ -71,7 +76,8 @@ public class SocketConnection {
         conn.connect();
     }
 
-    public void disconnect() {
+    public void disconnect(Batch serverData) {
+        this.emit(CLOSE, serverData);
         conn.disconnect();
     }
 
@@ -80,12 +86,81 @@ public class SocketConnection {
         return conn.connected();
     }
 
-    private Batch JSONtoBatch(JSONObject json) {
-        return null;
+    private Batch JSONtoBatch(JSONObject json, Batch out) {
+        if(json== null)
+            throw new NullPointerException("JSON cannot be null");
+        if(out == null)
+            throw new NullPointerException("Out parameter cannot be null");
+
+
+        Iterator<String> jsonKeys = json.keys();
+
+        while(jsonKeys.hasNext()) {
+            String key = jsonKeys.next();
+
+            try {
+                Object obj = json.get(key);
+
+                if (obj instanceof JSONObject) {
+                    out.putBatch(key, JSONtoBatch((JSONObject) obj, new Batch()));
+                } else if (obj instanceof String) {
+                    String str = (String) obj;
+                    if (str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false")) {
+                        out.putBoolean(key, Boolean.parseBoolean(str));
+                    } else {
+                        try {
+                            //Test to see if it's an integer
+                            out.putInteger(key, Integer.parseInt(str));
+                        } catch (NumberFormatException e) {
+                            try {
+                                //Test to see if its a Double
+                                out.putDouble(key, Double.parseDouble(str));
+                            } catch (NumberFormatException e2) {
+                                //Must be a String and not another accepted type
+                                out.putString(key, str);
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                //Not a valid key, I guess
+            }
+        }
+
+
+        return out;
     }
 
-    private JSONObject BatchToJSON(Batch batch) {
-        return null;
+    private JSONObject BatchToJSON(Batch batch, JSONObject out) {
+        if(batch == null)
+            throw new NullPointerException("Batch cannot be null");
+        if(out == null)
+            throw new NullPointerException("Out parameter cannot be null");
+
+        Iterator<String> keys = batch.keySet().iterator();
+
+        while(keys.hasNext()) {
+            String key = keys.next();
+
+            Object obj = batch.get(key);
+            try {
+                if (obj instanceof Batch) {
+                    out.put(key, BatchToJSON((Batch) obj, new JSONObject()));
+                }
+                else if (obj instanceof Question) {
+                    out.put(key, Question.toJSON((Question)obj));
+                } else if (obj instanceof String || obj instanceof Integer || obj instanceof Double || obj instanceof Boolean) {
+                    String placement = "" + obj;
+                    out.put(key, placement);
+                } else if (obj instanceof File) {
+                    out.put(key, (File)obj);
+                }
+            } catch(JSONException e) {
+                //Don't add it, I guess
+            }
+        }
+
+        return out;
     }
 
     public interface Listener {

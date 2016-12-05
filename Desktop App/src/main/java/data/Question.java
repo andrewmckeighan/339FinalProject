@@ -42,6 +42,10 @@ public class Question implements Serializable{
         return this;
     }
 
+    public int getNumAnswers() {
+        return this.answers.size();
+    }
+
     public void editAnswer(int location, String newAnswer) {
         this.answers.set(location, newAnswer);
     }

@@ -99,5 +99,4 @@ public class Batch extends HashMap<String, Serializable> implements Serializable
             return (File) o;
         return null;
     }
-
 }
