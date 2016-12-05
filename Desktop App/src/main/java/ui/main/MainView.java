@@ -21,7 +21,7 @@ public class MainView extends Application {
         System.out.println("This is the main stage");
         System.out.println(model.project_settings.toString());
 
-        AppData.send().localRequest(new Batch().putBatch(AppData.Local.SAVE_DATA, model.project_settings.toBatch()), primaryStage, controller, AppData.Local.SAVE_FILE);
+
 
         primaryStage.show();
     }

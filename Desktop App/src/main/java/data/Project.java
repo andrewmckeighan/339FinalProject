@@ -6,7 +6,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Squiggs on 12/4/2016.
+ * Project File:
+        -Needs:
+            A Batch full of Question objects
+            A Batch full of different settings
+                Session Key
+                Which Question is being asked
+                Last Known Save Location
+                Last Known File Name
+            A Batch full of Results
  */
 public class Project {
     public static final String QUESTIONS = "QuestionsLinkedList";
