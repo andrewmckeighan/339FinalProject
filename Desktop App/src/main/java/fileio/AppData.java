@@ -6,6 +6,7 @@ import fileio.net.SocketConnection;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 /**
  * Created by Squiggs on 11/28/2016.
@@ -16,6 +17,7 @@ public class AppData {
 
     private FileChooserBuilder files;
     private SocketConnection server;
+    private String serverKey = null;
 
     private AppData() {
 
@@ -25,35 +27,68 @@ public class AppData {
         return singleton;
     }
 
-    public void serverRequest(int type, Batch serverData) throws IllegalStateException{
+    /**
+     * This method deals with a server request.
+     *
+     * Given a batch and a type, this method will send a server request for a specific purpose. Check ServerRequest for details.
+     *
+     * @param serverData - The data to send. This changes with each different type of request. Check AppData.ServerRequest for  different Batch formats
+     * @param type - The type of server request. Check AppData.ServerRequest for the different request types and what the batch object requires.
+     * @return true if the command was successfully executed, false otherwise
+     * @throws IllegalStateException if a request is sent and you are not connected to the server
+     */
+    public boolean serverRequest(Batch serverData, int type) throws IllegalStateException{
         switch(type) {
-            case Server.SESSION_KEY:
-                server.connect();
-                server.emit(SocketConnection.REQUEST_SESSION_KEY, null);
-                break;
-            case Server.ASK_QUESTION:
+            case Server.Request.SESSION_KEY:
+                if(server.isConnected()) {
+                    server.emit(SocketConnection.REQUEST_SESSION_KEY, null);
+                    return true;
+                } else {
+                    throw new IllegalStateException("You have not connected. Please create a connect first.");
+                }
+                //break;
+            case Server.Request.ASK_QUESTION:
                 if(server.isConnected()) {
                     //TODO: Verify Serverdata only has one connection object
 
                     server.emit(SocketConnection.ASK_A_QUESTION, serverData);
-                }else
-                    throw new IllegalStateException("You have not connected. Please create a session key first.");
-                break;
-            case Server.END_QUESTION:
-                if(server.isConnected())
+                    return true;
+                } else {
+                    throw new IllegalStateException("You have not connected. Please create a connect first.");
+                }
+                //break;
+            case Server.Request.END_QUESTION:
+                if(server.isConnected()) {
                     server.emit(SocketConnection.RESOLVE_A_QUESTION, null);
-                else
-                    throw new IllegalStateException("You have not connected. Please create a session key first.");
-                break;
-            case Server.CONNECT:
-                server.connect();
-                break;
-            case Server.DISCONNECT:
+                    return true;
+                }
+                else {
+                    throw new IllegalStateException("You have not connected. Please create a connect first.");
+                }
+                //break;
+            case Server.Request.CONNECT:
+                try {
+                    //TODO allow custom connections
+                    server = new SocketConnection();
+                    this.subscribeToServerRersponse(Server.Response.RECEIVE_SESSION_KEY, new Server.Response.Listener() {
+                        public void call(Batch object) {
+                            serverKey = object.getString(Server.Response.Data.SESSION_KEY);
+                        }
+                    });
+                    server.connect();
+                    return true;
+                } catch(URISyntaxException e) {
+                    return false;
+                }
+                //break;
+            case Server.Request.DISCONNECT:
                 server.disconnect();
-                break;
+                return true;
+                //break;
         }
+        return false;
     }
-    public void subscribeToServerRersponse(String serverEventName, Server.Listener listener) {
+    public void subscribeToServerRersponse(String serverEventName, Server.Response.Listener listener) {
         server.on(serverEventName, listener);
     }
 
@@ -182,19 +217,69 @@ public class AppData {
         public static final String DIALOGUE_INITIAL_FILE_NAME = "eO0Euvum1w";
     }
 
-    public static class Server {
-        public static final int SESSION_KEY = 1;
-        public static final int ASK_QUESTION = 2;
-        public static final int END_QUESTION = 3;
-        public static final int DISCONNECT = 4;
-        public static final int CONNECT = 5;
+    public static final class Server {
+        /**
+         * This nested class deals with all server components that have to do with a Server Request
+         */
+        public static class Request {
+            /**
+             * Requests a SESSION_KEY from the server.
+             * The Batch object is not taken into account when sending this request. It's contents can be anything (including null)
+             * You can register a ServerResponse.Listener for the event RECEIVE_SESSION_KEY to get the session key you asked for
+             */
+            public static final int SESSION_KEY = 1;
 
-        public interface Listener extends SocketConnection.Listener{}
+            /**
+             * Asks a question to the server
+             * The Batch object must contain a Question object with the key ServerRequest.QUESTION. This question is what will be sent to the server.
+             * The Batch object must also contain a String with the key ServerRequest.KEY. This is the SESSION_KEY that the server returned with the .
+             * You can register a ServerResponse.Listener for the event RECEIVE_SENT_QA_CONFIRMATION to determine if the question was asked.
+             */
+            public static final int ASK_QUESTION = 2;
 
-        public static final String RECEIVE_SESSION_KEY = SocketConnection.GET_SESSION_KEY;
-        public static final String RECEIVE_SENT_QA_CONFIRMATION = SocketConnection.GET_ASK_CONFIRMATION;
-        public static final String RECEIVE_RESULTS = SocketConnection.GET_RESULTS;
+            /**
+             * Tells the server to end the current asking question
+             * The Batch object must contain a String with the key ServerRequest.KEY. This key is what determines.
+             * You can register a ServerResponse.Listener for the event RECEIVE_RESULTS to get the results from the question you just ended
+             */
+            public static final int END_QUESTION = 3;
+
+            //TODO finish documentation
+            /**
+             * Tells the server to disconnect from the server, thus nullifying your session key.
+             */
+            public static final int DISCONNECT = 4;
+            public static final int CONNECT = 5;
+
+            public static final String QUESTION = "5weDOw6jkP";
+            public static final String KEY = "EcIc5CrEDz";
+        }
+
+        /**
+         * This nested class deals with the responses you can get from a server request
+         * This class is juts a mirror of SocketConnection's constants. They are put here so other files don't have to import SocketConnections
+         */
+        public static class Response {
+            public interface Listener extends SocketConnection.Listener{}
+
+            public static final String RECEIVE_SESSION_KEY = SocketConnection.GET_SESSION_KEY;
+            public static final String RECEIVE_SENT_QA_CONFIRMATION = SocketConnection.GET_ASK_CONFIRMATION;
+            public static final String RECEIVE_RESULTS = SocketConnection.GET_RESULTS;
+
+            /**
+             * This nested class deals with the values in a received Batch file from a response.
+             */
+            public static class Data {
+                public static final String SESSION_KEY = SocketConnection.SESSION_KEY;
+            }
+        }
 
 
     }
+
+
+
+
+
+
 }

@@ -14,13 +14,20 @@ import java.net.URISyntaxException;
 public class SocketConnection {
 
     //TODO fill out static field
+    //The server request fields
     public static final String REQUEST_SESSION_KEY = "getKey";
     public static final String ASK_A_QUESTION = "submitQA";
     public static final String RESOLVE_A_QUESTION = "getQA";
 
+    //The server response values
     public static final String GET_SESSION_KEY = "sendKey";
     public static final String GET_ASK_CONFIRMATION = "";
     public static final String GET_RESULTS = "";
+
+    //The values in the JSON Objects received
+    public static final String SESSION_KEY = "";
+
+    //The values in the JSON Objects sent
 
 
     private final Socket conn;
