@@ -21,8 +21,7 @@ public class SocketConnection {
     //The server request fields
     public static final String REQUEST_SESSION_KEY = "getKey";
     public static final String ASK_A_QUESTION = "submitQA";
-    public static final String RESOLVE_A_QUESTION = "getQA";
-    private static final String CLOSE = "close";
+    public static final String CLOSE = "close";
 
     //The server response values
     public static final String GET_SESSION_KEY = "sendKey";
@@ -40,11 +39,14 @@ public class SocketConnection {
     private final Socket conn;
 
     public SocketConnection() throws URISyntaxException {
-        conn = IO.socket("http://localhost:1337", setOptions());
+        conn = IO.socket("http://localhost:6668", setOptions());
     }
 
     public SocketConnection(String uri) throws URISyntaxException {
         conn = IO.socket(uri, setOptions());
+
+
+
     }
 
     private IO.Options setOptions() {
@@ -85,7 +87,6 @@ public class SocketConnection {
     }
 
     public void disconnect(Batch serverData) {
-        this.emit(CLOSE, serverData);
         conn.disconnect();
     }
 

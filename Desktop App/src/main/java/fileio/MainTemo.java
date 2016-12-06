@@ -18,8 +18,8 @@ import java.net.URISyntaxException;
 public class MainTemo implements AppData.Callback {
     public static void main(String[] args) throws Exception {
 
-        //StartView.launch(StartView.class);
-        System.out.println("Start of Main");
+        StartView.launch(StartView.class);
+/*        System.out.println("Start of Main");
 
         while(!AppData.send().serverRequest(null, AppData.Server.Request.CONNECT));
 
@@ -40,11 +40,11 @@ public class MainTemo implements AppData.Callback {
                                 key.append(response.getString(AppData.Server.Response.Data.SESSION_KEY));
                             }
                         });
-                
+
             }
         }).start();
 
-        System.out.println("End of Main");
+        System.out.println("End of Main");*/
 
         /*JSONObject j = Question.toJSON(new Question().ask("Here is my question").withAnswers("A", "B", "C", "D"));
 

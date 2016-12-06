@@ -23,11 +23,12 @@
       <file leaf-file-name="AppData.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/fileio/AppData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="118" column="0" lean-forward="false" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
+            <state relative-caret-position="160">
+              <caret line="303" column="80" lean-forward="false" selection-start-line="303" selection-start-column="80" selection-end-line="303" selection-end-column="80" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4561#4562#0" expanded="true" />
+                <element signature="e#4389#4549#0" expanded="true" />
+                <element signature="e#4548#4549#0" expanded="true" />
                 <element signature="docComment;method#localRequest#0;class#AppData#0" expanded="false" />
                 <element signature="method#localRequest#0;class#AppData#0" expanded="false" />
                 <element signature="method#initFileChooser#0;class#AppData#0" expanded="false" />
@@ -36,31 +37,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainTemo.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainTemo.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/fileio/MainTemo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="42" column="16" lean-forward="true" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="16" />
+            <state relative-caret-position="68">
+              <caret line="23" column="83" lean-forward="true" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="83" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#895#1464#0" expanded="true" />
-                <element signature="e#1072#1421#0" expanded="true" />
-                <element signature="e#1420#1421#0" expanded="true" />
-                <element signature="e#1463#1464#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainView.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MainView.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ui/main/MainView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="152" column="48" lean-forward="false" selection-start-line="152" selection-start-column="48" selection-end-line="152" selection-end-column="48" />
+            <state relative-caret-position="191">
+              <caret line="155" column="100" lean-forward="false" selection-start-line="155" selection-start-column="100" selection-end-line="155" selection-end-column="100" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5815#5971#0" expanded="true" />
-                <element signature="e#5970#5971#0" expanded="true" />
+                <element signature="e#4774#5128#0" expanded="true" />
+                <element signature="e#5127#5128#0" expanded="true" />
+                <element signature="e#5817#6296#0" expanded="true" />
+                <element signature="e#5941#6269#0" expanded="true" />
+                <element signature="e#6268#6269#0" expanded="true" />
+                <element signature="e#6295#6296#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -69,82 +70,42 @@
       <file leaf-file-name="SocketConnection.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/fileio/net/SocketConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="833">
-              <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+            <state relative-caret-position="120">
+              <caret line="32" column="55" lean-forward="false" selection-start-line="32" selection-start-column="51" selection-end-line="32" selection-end-column="55" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1648#2136#0" expanded="true" />
-                <element signature="e#2135#2136#0" expanded="true" />
-                <element signature="e#2430#2431#0" expanded="true" />
-                <element signature="e#2460#2461#0" expanded="true" />
+                <element signature="e#1589#2077#0" expanded="true" />
+                <element signature="e#2076#2077#0" expanded="true" />
+                <element signature="e#2371#2372#0" expanded="true" />
+                <element signature="e#2401#2402#0" expanded="true" />
+                <element signature="e#2449#2450#0" expanded="true" />
+                <element signature="e#2482#2483#0" expanded="true" />
                 <element signature="method#BatchToJSON#0;class#SocketConnection#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Emitter.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/io/socket/engine.io-client/0.6.2/engine.io-client-0.6.2.jar!/io/socket/emitter/Emitter.class">
+      <file leaf-file-name="MainController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ui/main/MainController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="93">
-              <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Socket.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/io/socket/socket.io-client/0.6.2/socket.io-client-0.6.2.jar!/io/socket/client/Socket.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="111">
-              <caret line="277" column="0" lean-forward="false" selection-start-line="277" selection-start-column="0" selection-end-line="277" selection-end-column="0" />
+            <state relative-caret-position="380">
+              <caret line="75" column="15" lean-forward="false" selection-start-line="75" selection-start-column="15" selection-end-line="75" selection-end-column="15" />
               <folding>
-                <element signature="e#4209#4210#0" expanded="true" />
-                <element signature="e#4243#4244#0" expanded="true" />
+                <element signature="e#2286#2287#0" expanded="true" />
+                <element signature="e#2329#2330#0" expanded="true" />
+                <element signature="e#2401#2402#0" expanded="true" />
+                <element signature="e#2449#2450#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Batch.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/data/Batch.java">
+      <file leaf-file-name="SendAskQuestionRequest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ui/main/SendAskQuestionRequest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="111">
-              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JSONObject.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/json/json/20090211/json-20090211.jar!/org/json/JSONObject.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="93">
-              <caret line="343" column="0" lean-forward="false" selection-start-line="343" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
-              <folding>
-                <element signature="e#11435#11436#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JSONTokener.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/json/json/20090211/json-20090211.jar!/org/json/JSONTokener.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="111">
-              <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-              <folding>
-                <element signature="e#738#739#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileChooserBuilder.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/fileio/local/FileChooserBuilder.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
-              <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+            <state relative-caret-position="255">
+              <caret line="28" column="63" lean-forward="false" selection-start-line="28" selection-start-column="63" selection-end-line="28" selection-end-column="63" />
               <folding />
             </state>
           </provider>
@@ -192,12 +153,12 @@
         <option value="$PROJECT_DIR$/src/main/java/ui/main/ServerService.java" />
         <option value="$PROJECT_DIR$/src/main/java/data/Batch.java" />
         <option value="$PROJECT_DIR$/src/main/java/ui/main/MainModel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ui/main/SendAskQuestionRequest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ui/main/MainView.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ui/main/MainController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/fileio/AppData.java" />
-        <option value="$PROJECT_DIR$/src/main/java/fileio/net/SocketConnection.java" />
         <option value="$PROJECT_DIR$/src/main/java/fileio/MainTemo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ui/main/SendAskQuestionRequest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/fileio/net/SocketConnection.java" />
+        <option value="$PROJECT_DIR$/src/main/java/fileio/AppData.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ui/main/MainController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ui/main/MainView.java" />
       </list>
     </option>
   </component>
@@ -804,7 +765,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/fileio/net/SocketConnection.java</url>
-          <line>160</line>
+          <line>161</line>
           <properties />
           <option name="timeStamp" value="9" />
         </line-breakpoint>
@@ -816,7 +777,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/fileio/net/SocketConnection.java</url>
-          <line>58</line>
+          <line>60</line>
           <properties />
           <option name="timeStamp" value="15" />
         </line-breakpoint>
@@ -859,10 +820,6 @@
           <caret line="25" column="49" lean-forward="false" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#895#1464#0" expanded="true" />
-            <element signature="e#1072#1421#0" expanded="true" />
-            <element signature="e#1420#1421#0" expanded="true" />
-            <element signature="e#1463#1464#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -888,7 +845,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4561#4562#0" expanded="true" />
+            <element signature="e#4389#4549#0" expanded="true" />
+            <element signature="e#4548#4549#0" expanded="true" />
             <element signature="docComment;method#localRequest#0;class#AppData#0" expanded="false" />
             <element signature="method#localRequest#0;class#AppData#0" expanded="false" />
             <element signature="method#initFileChooser#0;class#AppData#0" expanded="false" />
@@ -918,10 +876,6 @@
           <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#895#1464#0" expanded="true" />
-            <element signature="e#1072#1421#0" expanded="true" />
-            <element signature="e#1420#1421#0" expanded="true" />
-            <element signature="e#1463#1464#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -947,7 +901,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4561#4562#0" expanded="true" />
+            <element signature="e#4389#4549#0" expanded="true" />
+            <element signature="e#4548#4549#0" expanded="true" />
             <element signature="docComment;method#localRequest#0;class#AppData#0" expanded="false" />
             <element signature="method#localRequest#0;class#AppData#0" expanded="false" />
             <element signature="method#initFileChooser#0;class#AppData#0" expanded="false" />
@@ -977,10 +932,6 @@
           <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#895#1464#0" expanded="true" />
-            <element signature="e#1072#1421#0" expanded="true" />
-            <element signature="e#1420#1421#0" expanded="true" />
-            <element signature="e#1463#1464#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1212,41 +1163,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ui/main/MainController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="61" column="18" lean-forward="false" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ui/main/SendAskQuestionRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="30" column="10" lean-forward="true" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/fileio/local/FileChooserBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="646">
           <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ui/main/MainView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="152" column="48" lean-forward="false" selection-start-line="152" selection-start-column="48" selection-end-line="152" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#5815#5971#0" expanded="true" />
-            <element signature="e#5970#5971#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1257,14 +1178,6 @@
           <folding>
             <element signature="e#738#739#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/data/Batch.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="111">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1297,13 +1210,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/fileio/AppData.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/data/Batch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="118" column="0" lean-forward="false" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
+        <state relative-caret-position="111">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ui/main/SendAskQuestionRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="28" column="63" lean-forward="false" selection-start-line="28" selection-start-column="63" selection-end-line="28" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/fileio/MainTemo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="23" column="83" lean-forward="true" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="83" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4561#4562#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/fileio/AppData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="303" column="80" lean-forward="false" selection-start-line="303" selection-start-column="80" selection-end-line="303" selection-end-column="80" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4389#4549#0" expanded="true" />
+            <element signature="e#4548#4549#0" expanded="true" />
             <element signature="docComment;method#localRequest#0;class#AppData#0" expanded="false" />
             <element signature="method#localRequest#0;class#AppData#0" expanded="false" />
             <element signature="method#initFileChooser#0;class#AppData#0" expanded="false" />
@@ -1313,29 +1253,46 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/fileio/net/SocketConnection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+        <state relative-caret-position="120">
+          <caret line="32" column="55" lean-forward="false" selection-start-line="32" selection-start-column="51" selection-end-line="32" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1648#2136#0" expanded="true" />
-            <element signature="e#2135#2136#0" expanded="true" />
-            <element signature="e#2430#2431#0" expanded="true" />
-            <element signature="e#2460#2461#0" expanded="true" />
+            <element signature="e#1589#2077#0" expanded="true" />
+            <element signature="e#2076#2077#0" expanded="true" />
+            <element signature="e#2371#2372#0" expanded="true" />
+            <element signature="e#2401#2402#0" expanded="true" />
+            <element signature="e#2449#2450#0" expanded="true" />
+            <element signature="e#2482#2483#0" expanded="true" />
             <element signature="method#BatchToJSON#0;class#SocketConnection#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/fileio/MainTemo.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/ui/main/MainController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="42" column="16" lean-forward="true" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="16" />
+        <state relative-caret-position="380">
+          <caret line="75" column="15" lean-forward="false" selection-start-line="75" selection-start-column="15" selection-end-line="75" selection-end-column="15" />
+          <folding>
+            <element signature="e#2286#2287#0" expanded="true" />
+            <element signature="e#2329#2330#0" expanded="true" />
+            <element signature="e#2401#2402#0" expanded="true" />
+            <element signature="e#2449#2450#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ui/main/MainView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="155" column="100" lean-forward="false" selection-start-line="155" selection-start-column="100" selection-end-line="155" selection-end-column="100" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#895#1464#0" expanded="true" />
-            <element signature="e#1072#1421#0" expanded="true" />
-            <element signature="e#1420#1421#0" expanded="true" />
-            <element signature="e#1463#1464#0" expanded="true" />
+            <element signature="e#4774#5128#0" expanded="true" />
+            <element signature="e#5127#5128#0" expanded="true" />
+            <element signature="e#5817#6296#0" expanded="true" />
+            <element signature="e#5941#6269#0" expanded="true" />
+            <element signature="e#6268#6269#0" expanded="true" />
+            <element signature="e#6295#6296#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1405,7 +1362,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>org.java-websocket:Java-WebSocket:1.3.0</last-edited>
+          <last-edited>io.socket:socket.io-client:0.6.2</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

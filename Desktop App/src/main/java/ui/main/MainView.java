@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -119,21 +120,21 @@ public class MainView extends Application {
         final Button getSessionKeyButton = new Button(model.get_session_key_button_text);
         final Label currentSessionKey = new Label(model.current_session_key);
         currentSessionKey.setVisible(false);
+
         getSessionKeyButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 getSessionKeyButton.setDisable(true);
+                controller.getSessionKey();
+            }
+        });
 
-                ServerService ss = new ServerService();
-                ss.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                    public void handle(WorkerStateEvent event) {
-                        currentSessionKey.setText((String) event.getSource().getValue());
-                        getSessionKeyButton.setVisible(false);
-                        currentSessionKey.setVisible(true);
-                    }
-                });
-
-                ss.start();
-
+        controller.askForConfirmation(new AppData.Callback() {
+            public void handle(int type, Batch response) {
+                Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+                a.setContentText("Received Response: " + response);
+                a.setHeaderText(null);
+                a.setTitle("Server Callback");
+                a.show();
             }
         });
 
@@ -141,16 +142,23 @@ public class MainView extends Application {
         final Button askEndQuestionButton = new Button(model.ask_question_button_text);
         askEndQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                if (askEndQuestionButton.getText().equals(model.ask_question_button_text))
+                //if (askEndQuestionButton.getText().equals(model.ask_question_button_text))
                     controller.askQuestion(questionText, answers);
-                else if(askEndQuestionButton.getText().equals(model.end_question_button_text))
-                    controller.endQuestion();
+               // else if(askEndQuestionButton.getText().equals(model.end_question_button_text))
+                //    controller.endQuestion();
             }
         });
 
         controller.askForSessionKey(new AppData.Callback() {
-            public void handle(int type, Batch response) {
-                questionText.setText("HAHA!!!");
+            public void handle(int type, final Batch response) {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        String session = response.getString(AppData.Server.Response.Data.SESSION_KEY);
+                        currentSessionKey.setText("Key:" + session);
+                        currentSessionKey.setVisible(true);
+                    }
+                });
+
             }
         });
 

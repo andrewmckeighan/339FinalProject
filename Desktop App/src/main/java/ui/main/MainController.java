@@ -15,6 +15,7 @@ import static fileio.AppData.Server;
 public class MainController implements AppData.Callback {
     MainModel ui;
     private AppData.Callback sessionCallback;
+    private AppData.Callback confirmationCallback;
 
     public MainController(MainModel model) {
         ui = model;
@@ -28,13 +29,18 @@ public class MainController implements AppData.Callback {
     }
 
     public void handle(int type, Batch response) {
-        System.out.println("Type: " + type + " Response: " + response);
+        System.out.println("MainController | Type: " + type + " Response: " + response);
+        String key;
         switch(type) {
             case Server.Response.RECEIVE_SESSION_KEY:
-                String key = response.getString(Server.Response.Data.SESSION_KEY);
+                key = response.getString(Server.Response.Data.SESSION_KEY);
                 ui.project_settings.settings().putString(Project.settings.SESSION_KEY, key);
                 sessionCallback.handle(type, response);
                 break;
+            case Server.Response.RECEIVE_SENT_QA_CONFIRMATION:
+                boolean conf = response.getBoolean(Server.Response.Data.CONFIRMATION);
+                System.out.println("conf: " + conf);
+                confirmationCallback.handle(type, response);
         }
 
     }
@@ -50,17 +56,24 @@ public class MainController implements AppData.Callback {
         }
         ui.project_settings.settings().putQuestion(Project.settings.CURRENT_QUESTION, q);
 
+        System.out.println("Sending request");
         SendAskQuestionRequest r = new SendAskQuestionRequest(ui.project_settings.settings().getString(Project.settings.SESSION_KEY), q);
         r.start();
     }
 
     public void askForSessionKey(final AppData.Callback anonymous) {
-        new Thread(new Runnable() {
-            public void run() {
-                anonymous.handle(0, null);
-            }
-        }).start();
-
         sessionCallback = anonymous;
+    }
+
+    public void askForConfirmation(final AppData.Callback anonymous) {
+        confirmationCallback = anonymous;
+    }
+
+    public void getSessionKey() {
+        while(!AppData.send().serverRequest(null, AppData.Server.Request.CONNECT));
+
+        AppData.send().subscribeToServerResponse(Server.Response.RECEIVE_SESSION_KEY, sessionCallback);
+        while(!AppData.send().serverRequest(null, Server.Request.SESSION_KEY));
+
     }
 }

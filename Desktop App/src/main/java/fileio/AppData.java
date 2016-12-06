@@ -65,7 +65,7 @@ public class AppData {
                 //break;
             case Server.Request.END_QUESTION:
                 if(server.isConnected()) {
-                    server.emit(SocketConnection.RESOLVE_A_QUESTION, serverData);
+                    server.emit(SocketConnection.CLOSE, serverData);
                     return true;
                 }
                 else {
@@ -301,6 +301,7 @@ public class AppData {
              */
             public static class Data {
                 public static final String SESSION_KEY = SocketConnection.SESSION_KEY;
+                public static final String CONFIRMATION = SocketConnection.ASK_CONFIRMATION;
             }
         }
     }

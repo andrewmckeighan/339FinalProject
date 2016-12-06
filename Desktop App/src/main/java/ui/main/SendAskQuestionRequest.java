@@ -22,6 +22,7 @@ public class SendAskQuestionRequest extends Service<Boolean> {
     protected Task<Boolean> createTask() {
         return new Task<Boolean>(){
             protected Boolean call() throws Exception {
+                System.out.println("In createtask");
                 while(!AppData.send().serverRequest(new Batch()
                                 .putString(AppData.Server.Request.Data.KEY, session)
                                 .putQuestion(AppData.Server.Request.Data.QUESTION, q)
