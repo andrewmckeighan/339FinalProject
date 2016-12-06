@@ -16,6 +16,7 @@ public class MainController implements AppData.Callback {
     MainModel ui;
     private AppData.Callback sessionCallback;
     private AppData.Callback confirmationCallback;
+    private AppData.Callback resultsCallback;
 
     public MainController(MainModel model) {
         ui = model;
@@ -41,11 +42,17 @@ public class MainController implements AppData.Callback {
                 boolean conf = response.getBoolean(Server.Response.Data.CONFIRMATION);
                 System.out.println("conf: " + conf);
                 confirmationCallback.handle(type, response);
+                break;
+            case Server.Response.RECEIVE_RESULTS:
+
+                resultsCallback.handle(type, response);
+                break;
         }
 
     }
 
     public void endQuestion() {
+
     }
 
     public void askQuestion(TextField question, LinkedList<TextField> answers) {
@@ -62,6 +69,12 @@ public class MainController implements AppData.Callback {
         r.start();
     }
 
+    public void getSessionKey() {
+        while(!AppData.send().serverRequest(null, AppData.Server.Request.CONNECT));
+
+        while(!AppData.send().serverRequest(null, Server.Request.SESSION_KEY));
+    }
+
     public void askForSessionKey(final AppData.Callback anonymous) {
         sessionCallback = anonymous;
     }
@@ -70,10 +83,7 @@ public class MainController implements AppData.Callback {
         confirmationCallback = anonymous;
     }
 
-    public void getSessionKey() {
-        while(!AppData.send().serverRequest(null, AppData.Server.Request.CONNECT));
-
-        while(!AppData.send().serverRequest(null, Server.Request.SESSION_KEY));
-
+    public void askForResults(final AppData.Callback anonymous) {
+        resultsCallback = anonymous;
     }
 }

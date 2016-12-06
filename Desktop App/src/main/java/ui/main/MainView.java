@@ -147,6 +147,23 @@ public class MainView extends Application {
             }
         });
 
+        endQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                endQuestionButton.setDisable(true);
+                for(TextField t: answers) {
+                    t.setDisable(false);
+                }
+                questionText.setDisable(false);
+                askQuestionButton.setDisable(false);
+                removeAnswerButton.setDisable(false);
+                addMoreAnswers.setDisable(false);
+                currentSessionKey.setVisible(false);
+                getSessionKeyButton.setDisable(false);
+
+                controller.endQuestion();
+            }
+        });
+
         controller.askForSessionKey(new AppData.Callback() {
             public void handle(int type, final Batch response) {
                 Platform.runLater(new Runnable() {
@@ -161,6 +178,20 @@ public class MainView extends Application {
         });
 
         controller.askForConfirmation(new AppData.Callback() {
+            public void handle(int type, final Batch response) {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+                        a.setContentText("Received Response: " + response);
+                        a.setHeaderText(null);
+                        a.setTitle("Server Callback");
+                        a.show();
+                    }
+                });
+            }
+        });
+
+        controller.askForResults(new AppData.Callback() {
             public void handle(int type, final Batch response) {
                 Platform.runLater(new Runnable() {
                     public void run() {
