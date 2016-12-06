@@ -1,0 +1,53 @@
+Sends:
+	getKey
+	submitQA
+	getQA
+	close
+Receives:
+	sendKey
+	submitConf
+	sendResults
+In the Sending JSON: (Not all of these are sent. 
+			These are all possible values for what I can send)
+{
+	"session":String
+	"Question": String
+	"Answers": {
+		"<number>":answer
+		"<number>":answer
+		"<number>":answer
+		"<number>":answer
+		"<number>":answer
+		"<number>":answer
+		"<number>":answer
+		"<number>":answer
+		"<number>":answer
+		"<number>":answer
+	}
+}
+
+In Receiving JSON:
+{
+	"session":String
+	"conf":boolean
+	"results": {
+		"0":{
+			answer
+			amountOfVotes
+		}
+		"1":{
+			answer
+			amountOfVotes
+		}
+		"2":{
+			answer
+			amountOfVotes
+		}
+		"3":{
+			answer
+			amountOfVotes
+		}
+		etc...
+	}
+	
+}

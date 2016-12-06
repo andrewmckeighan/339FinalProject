@@ -148,6 +148,12 @@ public class MainView extends Application {
             }
         });
 
+        controller.askForSessionKey(new AppData.Callback() {
+            public void handle(int type, Batch response) {
+                questionText.setText("HAHA!!!");
+            }
+        });
+
         main.getChildren().addAll(sessionKey, askEndQuestionButton);
 
 

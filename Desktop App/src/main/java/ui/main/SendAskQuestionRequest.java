@@ -26,7 +26,7 @@ public class SendAskQuestionRequest extends Service<Boolean> {
                                 .putString(AppData.Server.Request.Data.KEY, session)
                                 .putQuestion(AppData.Server.Request.Data.QUESTION, q)
                         , AppData.Server.Request.ASK_QUESTION));
-                return null;
+                return true;
             }
         };
     }
