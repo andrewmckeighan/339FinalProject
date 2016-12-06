@@ -140,7 +140,7 @@ var initializeServer = function(startServer) {
 //Socket routes
 io.on('error', function(socket){
 	console.log("There was an error.");
-}
+});
 io.on('connection', function (socket){
 	
 	console.log("New Connection");
