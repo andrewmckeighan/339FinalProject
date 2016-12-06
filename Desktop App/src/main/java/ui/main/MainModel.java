@@ -23,13 +23,10 @@ public class MainModel {
     public String session_key_title = "Current Session Key";
     public String get_session_key_button_text = "Request a Key!";
     public String current_session_key = "temp";/*project_settings.settings().getString(Project.settings.SESSION_KEY);*/
-    public Label currentSessionKey = new Label("temp");
+    public String ask_question_button_text = "Ask a question";
+    public String end_question_button_text = "Get results";
 
     public MainModel(MainView mainView) {
         ui = mainView;
-    }
-
-    public void updateKey(String s) {
-        currentSessionKey.setText("New Key");
     }
 }

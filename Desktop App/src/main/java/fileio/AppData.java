@@ -21,7 +21,12 @@ public class AppData {
     private String serverKey = null;
 
     private AppData() {
-
+        try {
+            server = new SocketConnection();
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Greeeaaaattt");
+        }
     }
 
     public static AppData send() {
@@ -42,7 +47,7 @@ public class AppData {
         switch(type) {
             case Server.Request.SESSION_KEY:
                 if(server.isConnected()) {
-                    server.emit(SocketConnection.REQUEST_SESSION_KEY, serverData);
+                    server.emit(SocketConnection.REQUEST_SESSION_KEY, null);
                     return true;
                 } else {
                     throw new IllegalStateException("You have not connected. Please create a connect first.");

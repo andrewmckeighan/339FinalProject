@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -40,12 +41,14 @@ public class MainView extends Application {
         System.out.println("This is the main stage");
         //System.out.println(model.project_settings.toString());
 
+        HBox root = new HBox();
+
 
         final GridPane grid = new GridPane();
-        {
+
             Label questionLabel = new Label(model.question_label);
 
-            TextField questionText = new TextField();
+            final TextField questionText = new TextField();
             Label answersLabel = new Label(model.answers_label);
             final LinkedList<TextField> answers = new LinkedList<TextField>();
             final Button addMoreAnswers = new Button(model.add_more_answers_button_label);
@@ -108,13 +111,14 @@ public class MainView extends Application {
             grid.setPadding(new Insets(10, 10, 10, 10));
             grid.setHgap(10);
             grid.setVgap(10);
-        }
+
 
         VBox main = new VBox();
         VBox sessionKey = new VBox();
         Label sessionKeyTitle = new Label(model.session_key_title);
         final Button getSessionKeyButton = new Button(model.get_session_key_button_text);
-        model.currentSessionKey.setVisible(false);
+        final Label currentSessionKey = new Label(model.current_session_key);
+        currentSessionKey.setVisible(false);
         getSessionKeyButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 getSessionKeyButton.setDisable(true);
@@ -122,9 +126,9 @@ public class MainView extends Application {
                 ServerService ss = new ServerService();
                 ss.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                     public void handle(WorkerStateEvent event) {
-                        model.currentSessionKey.setText((String) event.getSource().getValue());
+                        currentSessionKey.setText((String) event.getSource().getValue());
                         getSessionKeyButton.setVisible(false);
-                        model.currentSessionKey.setVisible(true);
+                        currentSessionKey.setVisible(true);
                     }
                 });
 
@@ -133,13 +137,23 @@ public class MainView extends Application {
             }
         });
 
-        sessionKey.getChildren().addAll(sessionKeyTitle, getSessionKeyButton, model.currentSessionKey);
+        sessionKey.getChildren().addAll(sessionKeyTitle, getSessionKeyButton, currentSessionKey);
+        final Button askEndQuestionButton = new Button(model.ask_question_button_text);
+        askEndQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                if (askEndQuestionButton.getText().equals(model.ask_question_button_text))
+                    controller.askQuestion(questionText, answers);
+                else if(askEndQuestionButton.getText().equals(model.end_question_button_text))
+                    controller.endQuestion();
+            }
+        });
+
+        main.getChildren().addAll(sessionKey, askEndQuestionButton);
 
 
-        main.getChildren().add(sessionKey);
-
+        root.getChildren().addAll(grid, main);
         model.stage = primaryStage;
-        model.stage.setScene(new Scene(main));
+        model.stage.setScene(new Scene(root));
 
         model.stage.sizeToScene();
         primaryStage.show();

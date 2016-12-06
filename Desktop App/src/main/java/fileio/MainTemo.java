@@ -18,9 +18,9 @@ import java.net.URISyntaxException;
 public class MainTemo implements AppData.Callback {
     public static void main(String[] args) throws Exception {
 
-        //StartView.launch(StartView.class);
+        StartView.launch(StartView.class);
 
-        SocketConnection test = new SocketConnection("http://localhost");
+        /*while(!AppData.send().serverRequest(null, AppData.Server.Request.CONNECT));
 
         JSONObject j = Question.toJSON(new Question().ask("Here is my question").withAnswers("A", "B", "C", "D"));
 
@@ -28,7 +28,9 @@ public class MainTemo implements AppData.Callback {
                                         .put(AppData.Server.Request.Data.KEY, "randomkey");
 
         AppData.send().serverRequest(sendingBatch, AppData.Server.Request.ASK_QUESTION);
-        /*
+*/
+
+         /*
         exampleData.putString("Project Name", "Stupid Questions");
         exampleData.putQuestion("Question1", new Question().ask("What is life's goal?").withAnswers("There is none", "Go home"));
 
