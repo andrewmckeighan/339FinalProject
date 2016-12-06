@@ -50,7 +50,7 @@ public class AppData {
                     server.emit(SocketConnection.REQUEST_SESSION_KEY, null);
                     return true;
                 } else {
-                    throw new IllegalStateException("You have not connected. Please create a connect first.");
+                    return false;
                 }
                 //break;
             case Server.Request.ASK_QUESTION:

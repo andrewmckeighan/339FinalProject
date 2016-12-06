@@ -133,10 +133,14 @@ var initializeServer = function(startServer) {
 //Socket routes
 io.on('connection', function (socket){
 	
+	console.log("New Connection");
 	socket.on('getKey', function(){
 		var text = generatekey();
 		socket.join(text);
-        socket.emit('sendKey', text);
+		console.log("Key:"+text);
+		var json = {"session":text};
+		
+        socket.emit('sendKey', JSON.stringify(json, null, 4));
     });
 	
 	socket.on('submitQA', function(data){

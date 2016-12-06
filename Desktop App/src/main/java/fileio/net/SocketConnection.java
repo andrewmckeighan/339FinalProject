@@ -40,7 +40,7 @@ public class SocketConnection {
     private final Socket conn;
 
     public SocketConnection() throws URISyntaxException {
-        conn = IO.socket("http://localhost:8886", setOptions());
+        conn = IO.socket("http://localhost:1337", setOptions());
     }
 
     public SocketConnection(String uri) throws URISyntaxException {
@@ -56,8 +56,14 @@ public class SocketConnection {
     public SocketConnection on(String eventName, final Listener listener) {
         conn.on(eventName, new Emitter.Listener() {
             public void call(Object... objects) {
-                if(objects.length > 1 && objects[0] instanceof JSONObject)
-                    listener.call(JSONtoBatch((JSONObject)objects[0], new Batch()));
+                if(objects.length > 0 && objects[0] instanceof String) {
+                    try{
+                        listener.call(JSONtoBatch(new JSONObject((String)objects[0]), new Batch()));
+                    } catch(Exception e) {
+                        listener.call(null);
+                    }
+
+                }
                 else
                     listener.call(null);
             }
