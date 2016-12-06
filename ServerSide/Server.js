@@ -9,7 +9,7 @@ var app = express();
 var io = sockets();
 var fs = require('fs');
 var server;
-var port = 1337;
+var port = 6668;
 //For each key, there is a qak -> question answer key object.
 var keys = [];
 
@@ -96,6 +96,13 @@ var getQA = function(key){
 				fullqak = JSON.parse(data);
 			}
 		});
+		var qa;
+	for(var i = 0; i < fullqak.length; i++){
+		if(fullqa[i].session == key){
+			return fullqa[i];
+		}
+	}
+	return null;
 		//find which QA we need for this key given.
 		//emit that to the user.
 }
@@ -131,21 +138,26 @@ var initializeServer = function(startServer) {
 
 //---------------------Websocket stuff--------------------------
 //Socket routes
+io.on('error', function(socket){
+	console.log("There was an error.");
+}
 io.on('connection', function (socket){
 	
 	socket.on('getKey', function(){
 		var text = generatekey();
 		socket.join(text);
-        socket.emit('sendKey', text);
+		console.log("New key created: "+text);
+        socket.emit('sendKey', JSON.stringify(text, null, 4));
     });
 	
 	socket.on('submitQA', function(data){
         setQA(data.session, data.Question, data.Answers);
+		socket.emit('submitConf', true);
     });
 	
     socket.on('getQA', function(data){
         getQA(data);
-		socket.emit('submitConf', true);
+		io.to(data.session).emit(data.Question, data.Answers);
     });
 	
 	socket.on('close', function(data){
