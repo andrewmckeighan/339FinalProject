@@ -50,10 +50,8 @@ public class MainController implements AppData.Callback {
         }
         ui.project_settings.settings().putQuestion(Project.settings.CURRENT_QUESTION, q);
 
-        AppData.send().serverRequest(new Batch()
-                .putString(Server.Request.Data.KEY, ui.project_settings.settings().getString(Project.settings.SESSION_KEY))
-                .putQuestion(Server.Request.Data.QUESTION, q)
-                , Server.Request.ASK_QUESTION);
+        SendAskQuestionRequest r = new SendAskQuestionRequest(ui.project_settings.settings().getString(Project.settings.SESSION_KEY), q);
+        r.start();
     }
 
     public void askForSessionKey(AppData.Callback anonymous) {

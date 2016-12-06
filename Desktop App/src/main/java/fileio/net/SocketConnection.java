@@ -26,11 +26,13 @@ public class SocketConnection {
 
     //The server response values
     public static final String GET_SESSION_KEY = "sendKey";
-    public static final String GET_ASK_CONFIRMATION = "";
-    public static final String GET_RESULTS = "";
+    public static final String GET_ASK_CONFIRMATION = "submitConf";
+    public static final String GET_RESULTS = "sendResults";
 
     //The values in the JSON Objects received
-    public static final String SESSION_KEY = "";
+    public static final String SESSION_KEY = "session";
+    public static final String ASK_CONFIRMATION = "conf";
+
 
     //The values in the JSON Objects sent
 

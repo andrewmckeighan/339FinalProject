@@ -60,7 +60,7 @@ public class AppData {
                     server.emit(SocketConnection.ASK_A_QUESTION, serverData);
                     return true;
                 } else {
-                    throw new IllegalStateException("You have not connected. Please create a connect first.");
+                    return false;
                 }
                 //break;
             case Server.Request.END_QUESTION:
@@ -69,7 +69,7 @@ public class AppData {
                     return true;
                 }
                 else {
-                    throw new IllegalStateException("You have not connected. Please create a connect first.");
+                    return false;
                 }
                 //break;
             case Server.Request.CONNECT:
@@ -303,13 +303,5 @@ public class AppData {
                 public static final String SESSION_KEY = SocketConnection.SESSION_KEY;
             }
         }
-
-
     }
-
-
-
-
-
-
 }
