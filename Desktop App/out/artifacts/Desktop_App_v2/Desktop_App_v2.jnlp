@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="Desktop_App_v2.jnlp">
+  <information>
+    <title>QA Desktop Ap</title>
+    <vendor>339Group23</vendor>
+    <description>Desktop App v2</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="Desktop_App_v2.jar" size="78572" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="600" height="400" main-class="ui.start.StartView"  name="Desktop App v2" />
+  <update check="background"/>
+</jnlp>

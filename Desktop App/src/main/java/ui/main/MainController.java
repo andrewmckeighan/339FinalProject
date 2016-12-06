@@ -4,7 +4,11 @@ import data.Batch;
 import data.Project;
 import data.Question;
 import fileio.AppData;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
+import ui.main.service.AskForSessionKeyService;
+import ui.main.service.SendAskQuestionRequest;
 
 import java.util.LinkedList;
 import static fileio.AppData.Server;
@@ -70,9 +74,24 @@ public class MainController implements AppData.Callback {
     }
 
     public void getSessionKey() {
-        while(!AppData.send().serverRequest(null, AppData.Server.Request.CONNECT));
 
-        while(!AppData.send().serverRequest(null, Server.Request.SESSION_KEY));
+        AskForSessionKeyService thread = new AskForSessionKeyService(10000);
+
+        thread.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            public void handle(WorkerStateEvent event) {
+                Object result = event.getSource().getValue();
+                if(result instanceof Boolean) {
+                    System.out.println("Bool: " +result);
+                    if (!(Boolean) result) {
+                        sessionCallback.handle(-1,
+                                new Batch().putString(Server.Response.Data.SESSION_KEY, "Failed to connect to server"));
+                   }
+                }
+            }
+        });
+
+        thread.start();
+
     }
 
     public void askForSessionKey(final AppData.Callback anonymous) {

@@ -165,12 +165,15 @@ public class MainView extends Application {
         });
 
         controller.askForSessionKey(new AppData.Callback() {
-            public void handle(int type, final Batch response) {
+            public void handle(final int type, final Batch response) {
                 Platform.runLater(new Runnable() {
                     public void run() {
                         String session = response.getString(AppData.Server.Response.Data.SESSION_KEY);
                         currentSessionKey.setText("Key:" + session);
                         currentSessionKey.setVisible(true);
+
+                        if(type == -1)
+                            getSessionKeyButton.setDisable(false);
                     }
                 });
 
