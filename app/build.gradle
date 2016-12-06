@@ -26,4 +26,9 @@ dependencies {
     compile 'com.android.support:design:25.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     compile 'com.github.nkzawa:socket.io-client:0.3.0'
+    compile ('io.socket:socket.io-client:0.8.2') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
+
 }

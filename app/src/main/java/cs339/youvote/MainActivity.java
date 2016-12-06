@@ -10,8 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.widget.EditText;
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+import org.json.*;
+
+import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_MESSAGE = "com.cs339.youvote.MESSAGE";
@@ -45,12 +49,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //submit code to enter session
-    public void submit(View view){
+    public void submit(View view) throws JSONException {
         if(true){ //This should be whether the sessionKey is true. Fix it later.
             Intent intent = new Intent(this, activity_session.class);
             EditText editText = (EditText) findViewById(R.id.session_code);
             String message = editText.getText().toString();
             intent.putExtra(EXTRA_MESSAGE, message);
+            boolean tst = sendKey(message);
             //if(sendKey(message)) {
                 startActivity(intent);
             //}
@@ -58,10 +63,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Sends the key
-    public boolean sendKey(String key){
-        boolean isKeyTrue = false;
+    public boolean sendKey(String inputKey) throws JSONException {
+        JSONObject keyFile = new JSONObject();
+        keyFile.put("session", inputKey);
+        final boolean[] isKeyTrue = {false};
+
+        Socket conn = null;
+        try {
+            conn = IO.socket("http://localhost:1337");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        conn.emit("enterRoom" , keyFile);
+        conn.on("keyconf", new Emitter.Listener(){
+            public void call(Object... objects) {
+                if(objects.length > 0) {
+                    String resp = (String) objects[0];
+                    if(resp.equals("true")){
+                        isKeyTrue[0] = true;
+                    }
+                }
+
+            }
+        });
         //TODO send the key to the server
-        return isKeyTrue;
+        return isKeyTrue[0];
     }
+
+
 
 }

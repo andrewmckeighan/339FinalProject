@@ -15,12 +15,23 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
+import org.json.*;
+
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 
 public class activity_session extends AppCompatActivity {
 
     private LinearLayout mLayout;
     private int qIdNum = 0;
+    private ArrayList<Integer> answerList = new ArrayList<Integer>();
+    private ArrayList<RadioGroup> radioGrpArr = new ArrayList<RadioGroup>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,13 +41,30 @@ public class activity_session extends AppCompatActivity {
         TextView textView = (TextView)findViewById(R.id.session_number);
         textView.setText(message);
         mLayout = (LinearLayout) findViewById(R.id.scrollLayout);
-        String[] test = {"hi", "there"};
-        setQuestions("test", test);
-        setQuestions("test2", test);
-
+        TextView waiting = createNewTextView("Waiting for questions...");
+        mLayout.addView(waiting);
+//        String[] test = {"hi", "there"};
+//        String[] test2 = {"hi", "there", "How", "Are","You?"};
+//        setQuestions("test", test);
+//        setQuestions("test2", test2);
 
     }
+    public void receiveQuestions(){//change TODO
+        Socket conn = null;
+        try {
+            conn = IO.socket("http://localhost:1337");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        conn.on("keyconf", new Emitter.Listener(){
+            public void call(Object... objects) {
+                if(objects.length > 0) {
+                    String resp = (String) objects[0];
+                }
 
+            }
+        });
+    }
     public void setQuestions(String question, String[] answers){ //Sets the arrays of questions to put into the scrollview
         //TODO
 
@@ -44,7 +72,9 @@ public class activity_session extends AppCompatActivity {
         RadioGroup RG = new RadioGroup(this);
         for(int i = 0; i < answers.length; i++){
             RG.addView(createNewQuestions(answers[i], ((qIdNum*10)+i)));
+            RG.setId(qIdNum);
         }
+        radioGrpArr.add(RG);
         mLayout.addView(RG);
         qIdNum++;
     }
@@ -59,7 +89,7 @@ public class activity_session extends AppCompatActivity {
         return textView;
     }
 
-    private Button createNewQuestions(String question, final int btnId) {
+    private Button createNewQuestions(String question, int btnId) {
         LinearLayout layout = (LinearLayout) findViewById(R.id.scrollLayout);
         final LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         final RadioButton button = new RadioButton(this);
@@ -67,11 +97,13 @@ public class activity_session extends AppCompatActivity {
         button.setText(" "+ question);
         button.setTextSize(32);
         button.setId(btnId);
+        button.setPadding(5,20,0,20);
         button.setButtonDrawable(android.R.color.transparent);
 //        button.setBackgroundColor(Color.TRANSPARENT);
-        //button.getBackground().setAlpha(80);
+//        button.getBackground().setAlpha(80);
         button.setBackgroundResource(R.drawable.buttonbackground);
         button.setTextColor(Color.BLACK);
+
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 //TODO
@@ -82,7 +114,13 @@ public class activity_session extends AppCompatActivity {
     }
 
 
-    public void castVote(){ //Sends users answers to the server
+    public void castVote(View view) throws JSONException { //Sends users answers to the server
+        JSONObject json = new JSONObject();
+        for(int i = 0; i < qIdNum; i++){
+            int id = radioGrpArr.get(i).getCheckedRadioButtonId();
+            System.out.println(i + " " + id);
+            json.put("Question " + i, id);
+        }
         //TODO
     }
 }
