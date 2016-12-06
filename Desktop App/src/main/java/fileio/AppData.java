@@ -281,8 +281,9 @@ public class AppData {
             public static final int CONNECT = 5;
 
             public static class Data {
-                public static final String QUESTION = "5weDOw6jkP";
-                public static final String KEY = "EcIc5CrEDz";
+                public static final String QUESTION = "Question";
+                public static final String ANSWER = "Answers";
+                public static final String KEY = "session";
             }
         }
 

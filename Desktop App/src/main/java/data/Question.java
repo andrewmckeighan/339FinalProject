@@ -12,7 +12,7 @@ import java.util.Collections;
  * Created by Squiggs on 11/28/2016.
  */
 public class Question implements Serializable{
-    String question;
+    public String question;
 
     private ArrayList<String> answers;
 
@@ -44,6 +44,10 @@ public class Question implements Serializable{
 
     public int getNumAnswers() {
         return this.answers.size();
+    }
+
+    public String getAnswer(int loc) {
+        return this.answers.get(loc);
     }
 
     public void editAnswer(int location, String newAnswer) {

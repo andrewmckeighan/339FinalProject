@@ -60,7 +60,8 @@ public class SocketConnection {
             public void call(Object... objects) {
                 if(objects.length > 0 && objects[0] instanceof String) {
                     try{
-                        listener.call(JSONtoBatch(new JSONObject((String)objects[0]), new Batch()));
+                        String cast = (String)objects[0];
+                        listener.call(JSONtoBatch(new JSONObject(cast), new Batch()));
                     } catch(Exception e) {
                         listener.call(null);
                     }
@@ -100,7 +101,6 @@ public class SocketConnection {
             throw new NullPointerException("JSON cannot be null");
         if(out == null)
             throw new NullPointerException("Out parameter cannot be null");
-
 
         Iterator<String> jsonKeys = json.keys();
 

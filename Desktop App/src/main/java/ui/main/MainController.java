@@ -52,7 +52,8 @@ public class MainController implements AppData.Callback {
         Question q = new Question()
                 .ask(question.getText());
         for(TextField t: answers) {
-                q.withAnswers(t.getText());
+            if(t != null && !t.getText().equals(""))
+                q.withAnswer(t.getText());
         }
         ui.project_settings.settings().putQuestion(Project.settings.CURRENT_QUESTION, q);
 
@@ -72,7 +73,6 @@ public class MainController implements AppData.Callback {
     public void getSessionKey() {
         while(!AppData.send().serverRequest(null, AppData.Server.Request.CONNECT));
 
-        AppData.send().subscribeToServerResponse(Server.Response.RECEIVE_SESSION_KEY, sessionCallback);
         while(!AppData.send().serverRequest(null, Server.Request.SESSION_KEY));
 
     }

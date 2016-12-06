@@ -128,24 +128,22 @@ public class MainView extends Application {
             }
         });
 
-        controller.askForConfirmation(new AppData.Callback() {
-            public void handle(int type, Batch response) {
-                Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-                a.setContentText("Received Response: " + response);
-                a.setHeaderText(null);
-                a.setTitle("Server Callback");
-                a.show();
-            }
-        });
-
         sessionKey.getChildren().addAll(sessionKeyTitle, getSessionKeyButton, currentSessionKey);
-        final Button askEndQuestionButton = new Button(model.ask_question_button_text);
-        askEndQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        final Button askQuestionButton = new Button(model.ask_question_button_text);
+        final Button endQuestionButton = new Button(model.end_question_button_text);
+        endQuestionButton.setDisable(true);
+        askQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                //if (askEndQuestionButton.getText().equals(model.ask_question_button_text))
-                    controller.askQuestion(questionText, answers);
-               // else if(askEndQuestionButton.getText().equals(model.end_question_button_text))
-                //    controller.endQuestion();
+                endQuestionButton.setDisable(false);
+                for(TextField t: answers) {
+                    t.setDisable(true);
+                }
+                questionText.setDisable(true);
+                askQuestionButton.setDisable(true);
+                removeAnswerButton.setDisable(true);
+                addMoreAnswers.setDisable(true);
+
+                controller.askQuestion(questionText, answers);
             }
         });
 
@@ -162,7 +160,21 @@ public class MainView extends Application {
             }
         });
 
-        main.getChildren().addAll(sessionKey, askEndQuestionButton);
+        controller.askForConfirmation(new AppData.Callback() {
+            public void handle(int type, final Batch response) {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+                        a.setContentText("Received Response: " + response);
+                        a.setHeaderText(null);
+                        a.setTitle("Server Callback");
+                        a.show();
+                    }
+                });
+            }
+        });
+
+        main.getChildren().addAll(sessionKey, askQuestionButton, endQuestionButton);
 
 
         root.getChildren().addAll(grid, main);

@@ -13,9 +13,9 @@ var port = 6668;
 //For each key, there is a qak -> question answer key object.
 var keys = [];
 
-var liveSessions = [];
+var liveSessions = {'key':[]};
 
-var fullqak;
+var fullqak = [];
 
 //for each key there is also a list of numbers, which are answers to questions.
 var akCombo;
@@ -60,7 +60,7 @@ var getKeys = function(){
 var setQA = function(session, Question, Answers){
 	var foundKey = false;
 	//qak is Question,Answer,Key combination
-	var qak;
+	var qak = {};
 	for(var i = 0; i < keys.length; i ++){
 		if(keys[i] == session){
 			qak.session = session;
@@ -71,7 +71,7 @@ var setQA = function(session, Question, Answers){
 		}
 	}
 	if(!foundKey){
-		console.log('Key '+key+' not recognized');
+		console.log('Key '+session+' not recognized');
 	}
 	else{
 		fs.readFile('qak.json', function(err, data){
@@ -98,7 +98,6 @@ var getQA = function(key){
 				fullqak = JSON.parse(data);
 			}
 		});
-		var qa;
 	for(var i = 0; i < fullqak.length; i++){
 		if(fullqa[i].session == key){
 			return fullqa[i];
@@ -189,10 +188,12 @@ io.on('connection', function (socket){
     });
 	
 	socket.on('submitQA', function(data){
+		console.log(typeof data);
+		console.log(data);
 		liveSessions.key.push(data.session);
         setQA(data.session, data.Question, data.Answers);
-		socket.emit('submitConf', true);
-		io.to(data.session).emit('sendQA', qa);
+		socket.emit('submitConf', JSON.stringify({"conf":"true"}));
+		io.to(data.session).emit('sendQA', data);
     });
 	
 	socket.on('enterRoom', function(data){

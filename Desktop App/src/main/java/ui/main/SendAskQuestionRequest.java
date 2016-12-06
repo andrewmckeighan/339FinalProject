@@ -23,9 +23,16 @@ public class SendAskQuestionRequest extends Service<Boolean> {
         return new Task<Boolean>(){
             protected Boolean call() throws Exception {
                 System.out.println("In createtask");
+                Batch answers = new Batch();
+
+                for(int x=0; x < q.getNumAnswers(); x++) {
+                    answers.put(""+(x+1), q.getAnswer(x));
+                }
+
                 while(!AppData.send().serverRequest(new Batch()
                                 .putString(AppData.Server.Request.Data.KEY, session)
-                                .putQuestion(AppData.Server.Request.Data.QUESTION, q)
+                                .putString(AppData.Server.Request.Data.QUESTION, q.question)
+                                .putBatch(AppData.Server.Request.Data.ANSWER, answers)
                         , AppData.Server.Request.ASK_QUESTION));
                 return true;
             }
