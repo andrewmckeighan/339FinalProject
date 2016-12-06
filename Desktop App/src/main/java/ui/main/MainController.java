@@ -54,7 +54,13 @@ public class MainController implements AppData.Callback {
         r.start();
     }
 
-    public void askForSessionKey(AppData.Callback anonymous) {
+    public void askForSessionKey(final AppData.Callback anonymous) {
+        new Thread(new Runnable() {
+            public void run() {
+                anonymous.handle(0, null);
+            }
+        }).start();
+
         sessionCallback = anonymous;
     }
 }
