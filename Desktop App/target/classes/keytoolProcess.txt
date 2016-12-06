@@ -1,0 +1,11 @@
+Java Keystore:
+
+Ran command: keytool -genkey -alias mydomain -keyalg RSA -keystore keystore.jks -storepass passwork
+
+Asked for name: Arlo Squiggsly
+Asked for organizational unit: edu
+Asked for name of organization: CPRE339
+What is the name of your City: Ames
+What is the name of your state: Iowa
+Two-Letter Country Code: US
+password: finalProject
