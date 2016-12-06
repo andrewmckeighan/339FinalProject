@@ -138,7 +138,7 @@ public class activity_session extends AppCompatActivity {
         for(int i = 0; i < qIdNum; i++){
             int id = radioGrpArr.get(i).getCheckedRadioButtonId();
             System.out.println(i + " " + id);
-            json.put("Question", id);
+            json.put("Answer", id);
         }
         Socket conn = null;
         try {
