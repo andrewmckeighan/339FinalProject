@@ -11,9 +11,9 @@ var fs = require('fs');
 var server;
 var port = 1337;
 //For each key, there is a qak -> question answer key object.
-var keys[];
+var keys = [];
 
-var fullqak[];
+var fullqak;
 
 //for each key there is also a list of numbers, which are answers to questions.
 var akCombo;
@@ -21,40 +21,45 @@ var akCombo;
 //---------------------Functions--------------------------
 //Generates and saves a random key used for authentication
 var generatekey = function(){
+	console.log("Generating key");
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     for( var i=0; i < 5; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
-	
-    fs.writeFile('keys.json', JSON.stringify(text, null, 4), function(err){
+	keys.push(text);
+    fs.writeFile('keys.json', JSON.stringify(keys, null, 4), function(err){
         if(err) {
              console.log(err);
         } else{
-            getKeys();
+			console.log("New key created.");
+            //getKeys();
+			
         }
     });
     return text;
 };
 
-var getKeys = function(startupCallback){
+var getKeys = function(){
+	console.log("Getting keys");
     fs.readFile('keys.json', function(err, data){
         if(err){
             console.log(err);
         } else{
+			debugger;
             keys = JSON.parse(data);
+			console.log(keys);
         }
         //Handles callback if function is being called on server startup
-        if(startupCallback){ startupCallback() }
     });
 };
 
 //key and question need to be strings, answers needs to be a string array
 var setQA = function(key, question, answers){
-	boolean foundKey = false;
+	var foundKey = false;
 	//qak is Question,Answer,Key combination
 	var qak;
-	for(int i = 0; i < keys.length; i ++){
+	for(var i = 0; i < keys.length; i ++){
 		if(keys[i] == key){
 			qak.key = key;
 			qak.question = question;
@@ -73,10 +78,6 @@ var setQA = function(key, question, answers){
 			} else{
 				fullqak = JSON.parse(data);
 			}
-			//Handles callback if function is being called on server startup
-			if(startupCallback){
-				startupCallback()
-			}
 		});
 		fullqak += qak;
 		fs.writeFile('qak.json', JSON.stringify(fullqak, null, 4), function(err){
@@ -85,7 +86,7 @@ var setQA = function(key, question, answers){
 			}
 		});
 	}
-}
+};
 
 var getQA = function(key){
 	fs.readFile('qak.json', function(err, data){
@@ -94,23 +95,24 @@ var getQA = function(key){
 			} else{
 				fullqak = JSON.parse(data);
 			}
-			//Handles callback if function is being called on server startup
-			if(startupCallback){
-				startupCallback()
-			}
 		});
+		//find which QA we need for this key given.
+		//emit that to the user.
 }
 
+//Handles the initial server setup before starting
+var initializeServer = function(startServer) {
+            startServer();
+};
 
 //---------------------Server Start--------------------------
 (function(){
     //Link required startup methods
-    var functions = [getkeys, getQA];
-
+    //var functions = [getKeys, getQA];
     //What to do once initialization finishes
-    var start = function(){
-        security.init({'maxClientConnections': maxClientConnections, 'debounceThreshold': debounceThreshold});
-
+    //var start = function(){
+        //security.init({'maxClientConnections': maxClientConnections, 'debounceThreshold': debounceThreshold});
+		debugger;
         //Starts the Express server
         server = app.listen(port, function () {
             //Server started
@@ -120,26 +122,43 @@ var getQA = function(key){
             io.listen(server);
             console.log('Socket server running on port ' + port);
         });
-    };
-    initializeServer(functions, start);
+   // };
+    //initializeServer();
+		console.log("key time");
+			getKeys();
+			//generatekey();
 })();
 
 //---------------------Websocket stuff--------------------------
 //Socket routes
-io.on('connection', function (socket) {	
+io.on('connection', function (socket){
 	
 	socket.on('getKey', function(){
-        socket.emit('sendKey', generatekey());
+		var text = generatekey();
+		socket.join(text);
+        socket.emit('sendKey', text);
     });
 	
 	socket.on('submitQA', function(data){
-        setQA(data.key, data.question, data.answers);
+        setQA(data.session, data.Question, data.Answers);
     });
 	
     socket.on('getQA', function(data){
         getQA(data);
+		socket.emit('submitConf', true);
     });
+	
+	socket.on('close', function(data){
+		socket.close(data);
+		//gather the data that will be sent back to the desktop.
+		//results.session, results.conf, results.results
+		socket.emit('sendResults', results);
+	});
+	
+	socket.on('sendA', function(data){
+		
+	});
 	//Android user sends key.
 	//Push questions to android user.
 	//Set up rooms.
-}
+});
