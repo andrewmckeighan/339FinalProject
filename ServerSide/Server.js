@@ -18,7 +18,7 @@ var liveSessions = {'key':[]};
 var fullqak = [];
 
 //for each key there is also a list of numbers, which are answers to questions.
-var akCombo;
+var answers = [[]];
 
 //---------------------Functions--------------------------
 //Generates and saves a random key used for authentication
@@ -162,6 +162,7 @@ var initializeServer = function(startServer) {
             //Start socket server
             io.listen(server);
             console.log('Socket server running on port ' + port);
+			
         });
    // };
     //initializeServer();
@@ -197,15 +198,30 @@ io.on('connection', function (socket){
     });
 	
 	socket.on('enterRoom', function(data){
-		enterRoom();
+		enterRoom(data);
 	});
 	
 	socket.on('answerQA', function(data){
+		var thisKey = data.session;
+		var answerNum = data.Answer;
+		for(var j = 0; j < keys.length; j++){
+			if(keys[i] == data.session){
+				answers[i].push(data.Answer);
+			}
+		}
 		//Logic here in order to answer a question.
 	});
 	
 	socket.on('close', function(data){
 		socket.close(data);
+		//remove the key from liveSessions.
+		var results;
+		for(var i = 0; i < keys.length; i++){
+			if(keys[i] == data.session){
+				liveSessions.key.slice(i, 1);
+				results = answers[i];
+			}
+		}
 		//gather the data that will be sent back to the desktop.
 		//results.session, results.conf, results.results
 		socket.emit('sendResults', results);
