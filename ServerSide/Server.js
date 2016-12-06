@@ -224,6 +224,6 @@ io.on('connection', function (socket){
 		}
 		//gather the data that will be sent back to the desktop.
 		//results.session, results.conf, results.results
-		socket.emit('sendResults', results);
+		socket.emit('sendResults', JSON.stringify({'Answers':results}, null, 4));
 	});
 });
