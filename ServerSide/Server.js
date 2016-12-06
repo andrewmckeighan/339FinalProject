@@ -55,15 +55,15 @@ var getKeys = function(){
 };
 
 //key and question need to be strings, answers needs to be a string array
-var setQA = function(key, question, answers){
+var setQA = function(session, Question, Answers){
 	var foundKey = false;
 	//qak is Question,Answer,Key combination
 	var qak;
 	for(var i = 0; i < keys.length; i ++){
-		if(keys[i] == key){
-			qak.key = key;
-			qak.question = question;
-			qak.answers = answers;
+		if(keys[i] == session){
+			qak.session = session;
+			qak.Question = Question;
+			qak.Answers = Answers;
 			foundKey = true;
 			break;
 		}
@@ -79,7 +79,7 @@ var setQA = function(key, question, answers){
 				fullqak = JSON.parse(data);
 			}
 		});
-		fullqak += qak;
+		fullqak.push(qak);
 		fs.writeFile('qak.json', JSON.stringify(fullqak, null, 4), function(err){
 			if(err) {
 				 console.log(err);
