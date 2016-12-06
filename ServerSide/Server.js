@@ -13,6 +13,8 @@ var port = 6668;
 //For each key, there is a qak -> question answer key object.
 var keys = [];
 
+var liveSessions = [];
+
 var fullqak;
 
 //for each key there is also a list of numbers, which are answers to questions.
@@ -107,6 +109,39 @@ var getQA = function(key){
 		//emit that to the user.
 }
 
+var enterRoom = function(data){
+	//if the session for that room is live, send them the Q&A
+		var joined = false;
+		var validKey = false;
+		//Search through all the keys to make sure the current key is valid.
+		for(var j = 0; j < keys.length; j++){
+			if(keys[j] == data.session){
+				socket.emit('keyconf', "true");
+				validKey = true;
+				break;
+			}
+		}
+		//Searching through all the live session keys to see if this key session is live yet..
+		if(validKey){
+			for(var i = 0; i < liveSessions.key.length; i++){
+				if(liveSessions.key[i] == data.session){
+					socket.join(data.session);
+					joined = true;
+					break;
+				}
+			}
+			if(joined){
+				var qa = getQA(data.session);
+				socket.emit('sendQA', qa);
+			}else{
+				socket.emit('notSuccessful', false);
+			}
+		}
+		else{
+			socket.emit('keyconf', "false");
+		}
+}
+
 //Handles the initial server setup before starting
 var initializeServer = function(startServer) {
             startServer();
@@ -154,14 +189,19 @@ io.on('connection', function (socket){
     });
 	
 	socket.on('submitQA', function(data){
+		liveSessions.key.push(data.session);
         setQA(data.session, data.Question, data.Answers);
 		socket.emit('submitConf', true);
+		io.to(data.session).emit('sendQA', qa);
     });
 	
-    socket.on('getQA', function(data){
-        getQA(data);
-		io.to(data.session).emit(data.Question, data.Answers);
-    });
+	socket.on('enterRoom', function(data){
+		enterRoom();
+	});
+	
+	socket.on('answerQA', function(data){
+		//Logic here in order to answer a question.
+	});
 	
 	socket.on('close', function(data){
 		socket.close(data);
@@ -169,11 +209,4 @@ io.on('connection', function (socket){
 		//results.session, results.conf, results.results
 		socket.emit('sendResults', results);
 	});
-	
-	socket.on('sendA', function(data){
-		
-	});
-	//Android user sends key.
-	//Push questions to android user.
-	//Set up rooms.
 });
