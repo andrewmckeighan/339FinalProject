@@ -26,7 +26,8 @@ import io.socket.emitter.Emitter;
 
 
 public class activity_session extends AppCompatActivity {
-
+    private String message;
+    private TextView waiting;
     private LinearLayout mLayout;
     private int qIdNum = 0;
     private ArrayList<Integer> answerList = new ArrayList<Integer>();
@@ -37,11 +38,11 @@ public class activity_session extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         TextView textView = (TextView)findViewById(R.id.session_number);
         textView.setText(message);
         mLayout = (LinearLayout) findViewById(R.id.scrollLayout);
-        TextView waiting = createNewTextView("Waiting for questions...");
+        waiting = createNewTextView("Waiting for questions...");
         mLayout.addView(waiting);
 //        String[] test = {"hi", "there"};
 //        String[] test2 = {"hi", "there", "How", "Are","You?"};
@@ -56,22 +57,39 @@ public class activity_session extends AppCompatActivity {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        conn.on("keyconf", new Emitter.Listener(){
+        conn.on("sendQA", new Emitter.Listener(){
             public void call(Object... objects) {
                 if(objects.length > 0) {
-                    String resp = (String) objects[0];
-                }
+                    mLayout.removeView(waiting);
+                    String quest = (String) objects[0];
+                    try {
+                        JSONObject json = new JSONObject(quest);
+                        String question = json.getString("Question");
+                        JSONObject answersjson = json.getJSONObject("Answers");
+                        ArrayList<String> answers = new ArrayList<String>();
+                        try{
+                            for(int i = 1; i<=10; i++){
+                                answers.add(answersjson.getString(""+i));
+                            }
+                            setQuestions(question, answers);
+                        } catch(JSONException e){
 
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
         });
     }
-    public void setQuestions(String question, String[] answers){ //Sets the arrays of questions to put into the scrollview
+    public void setQuestions(String question, ArrayList<String> answers){ //Sets the arrays of questions to put into the scrollview
         //TODO
 
         mLayout.addView(createNewTextView(question));
         RadioGroup RG = new RadioGroup(this);
-        for(int i = 0; i < answers.length; i++){
-            RG.addView(createNewQuestions(answers[i], ((qIdNum*10)+i)));
+        for(int i = 0; i < answers.size(); i++){
+            RG.addView(createNewQuestions(answers.get(i), ((qIdNum*10)+i)));
             RG.setId(qIdNum);
         }
         radioGrpArr.add(RG);
@@ -116,11 +134,22 @@ public class activity_session extends AppCompatActivity {
 
     public void castVote(View view) throws JSONException { //Sends users answers to the server
         JSONObject json = new JSONObject();
+        json.put("session", message);
         for(int i = 0; i < qIdNum; i++){
             int id = radioGrpArr.get(i).getCheckedRadioButtonId();
             System.out.println(i + " " + id);
-            json.put("Question " + i, id);
+            json.put("Question", id);
         }
+        Socket conn = null;
+        try {
+            conn = IO.socket("http://localhost:1337");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        conn.emit("answerQuestion" , json);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         //TODO
     }
 }
