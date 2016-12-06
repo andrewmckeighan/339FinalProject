@@ -1,0 +1,37 @@
+Wesley Vansteenburg
+
+Andrew McKeighan
+
+Josh Engelhardt
+
+Two locations where you implement defensive programming:
+	-"339FinalProject\Desktop App\src\main\java\fileio\AppData.java"
+		This is the AppData class. It only allows commands that are supported by the server specifications.
+	-"339FinalProject\Desktop App\src\main\java\data\Project.java"
+		This class verifies that the project file is a valid file. This is used when reading in a previously saved QA session.
+		It has checks to make sure that the QA file session was saved using the current version of our program and will eliminate the
+		risk of incorrectly reading in data.
+
+Two locations where you might have corrected code smells:
+	-"339FinalProject\ServerSide\Server.js"
+		There were multiple times at the bottom of this file in "io.on('connection', function(...." section that socket.on instances were written
+		very badly. Josh went through and cleaned these up by creating separate functions for this functionality. This was needed because
+		the code needed to be used multiple times in different places.
+	-"339FinalProject\ServerSide\Server.js"
+		In the socket.emit section (at the bottom) I was returning way more information than was actually needed. I was sending a lot of redunant information
+		to the Desktop application when I only needed to be sending it a confirmation that adding the question/answers was successful.
+	
+Locations that are responsible for inter-processes/threads communication
+	-"339FinalProject\ServerSide\Server.js"
+		At the bottom of this file is all of the socket communication. It also uses rooms that allow for multiple things to be running at once.
+		This is the main part that is responsible. There will (or can) be multiple instance of the desktop application and multiple android
+		devices that can connect to this server. This means the whole program will be working together across multiple threads. The socket.io
+		will also be using multiple threads to deal with the rooms we're using.
+		
+Three locations where you implement three design patterns:
+	-"339FinalProject\Desktop App\src\main\java\ui\main"
+		This has three classes for an MVC pattern in the Desktop UI.
+	-"339FinalProject\ServerSide\Server.js"
+		This has a whole client-server pattern. It connects both with a desktop user and multiple android users.
+	-"339FinalProject\Desktop App\src\main\java\fileio\AppData.java"
+		This uses a shared-data pattern. It will share the question object accross multiple classes.
