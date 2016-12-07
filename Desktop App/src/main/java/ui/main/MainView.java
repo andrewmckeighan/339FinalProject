@@ -161,6 +161,10 @@ public class MainView extends Application {
                 getSessionKeyButton.setDisable(false);
 
                 controller.endQuestion();
+
+                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                a.setContentText("This is not implemented yet");
+                a.show();
             }
         });
 
