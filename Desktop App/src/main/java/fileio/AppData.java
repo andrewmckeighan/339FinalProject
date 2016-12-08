@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.File;
+import java.net.Socket;
 import java.net.URISyntaxException;
 
 /**
@@ -303,6 +304,7 @@ public class AppData {
             public static class Data {
                 public static final String SESSION_KEY = SocketConnection.SESSION_KEY;
                 public static final String CONFIRMATION = SocketConnection.ASK_CONFIRMATION;
+                public static final String RESULTS = SocketConnection.RESULT_DATA;
             }
         }
     }

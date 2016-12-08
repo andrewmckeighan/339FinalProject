@@ -31,6 +31,7 @@ public class SocketConnection {
     //The values in the JSON Objects received
     public static final String SESSION_KEY = "session";
     public static final String ASK_CONFIRMATION = "conf";
+    public static final String RESULT_DATA = "results";
 
 
     //The values in the JSON Objects sent
@@ -44,9 +45,6 @@ public class SocketConnection {
 
     public SocketConnection(String uri) throws URISyntaxException {
         conn = IO.socket(uri, setOptions());
-
-
-
     }
 
     private IO.Options setOptions() {

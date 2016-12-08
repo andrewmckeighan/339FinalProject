@@ -162,9 +162,6 @@ public class MainView extends Application {
 
                 controller.endQuestion();
 
-                Alert a = new Alert(Alert.AlertType.INFORMATION);
-                a.setContentText("This is not implemented yet");
-                a.show();
             }
         });
 
@@ -199,14 +196,21 @@ public class MainView extends Application {
         });
 
         controller.askForResults(new AppData.Callback() {
-            public void handle(int type, final Batch response) {
+            public void handle(final int type, final Batch response) {
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-                        a.setContentText("Received Response: " + response);
-                        a.setHeaderText(null);
-                        a.setTitle("Server Callback");
-                        a.show();
+                        if(type == -1 || response == null) {
+                            Alert a = new Alert(Alert.AlertType.ERROR);
+                            a.setContentText("Request Failed: " + type + " " + response);
+                            a.setHeaderText(null);
+                            a.setTitle("Server Callback");
+                            a.show();
+                        } else {
+                            //move to new window
+                            Alert a = new Alert(Alert.AlertType.INFORMATION);
+                            a.setContentText("Request Successful: " + response);
+                            a.show();
+                        }
                     }
                 });
             }

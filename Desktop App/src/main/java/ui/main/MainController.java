@@ -7,6 +7,7 @@ import fileio.AppData;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
+import ui.main.service.AskForResultsService;
 import ui.main.service.AskForSessionKeyService;
 import ui.main.service.SendAskQuestionRequest;
 
@@ -48,7 +49,11 @@ public class MainController implements AppData.Callback {
                 confirmationCallback.handle(type, response);
                 break;
             case Server.Response.RECEIVE_RESULTS:
-
+                if(response != null) {
+                    ui.project_settings.settings().putString(Project.settings.SESSION_KEY, null);
+                    ui.project_settings.settings().putQuestion(Project.settings.CURRENT_QUESTION, null);
+                    ui.project_settings.settings().put(Project.RESULTS, response.getBatch(Server.Response.Data.RESULTS));
+                }
                 resultsCallback.handle(type, response);
                 break;
         }
@@ -56,7 +61,22 @@ public class MainController implements AppData.Callback {
     }
 
     public void endQuestion() {
+        String set = ui.project_settings.settings().getString(Project.settings.SESSION_KEY);
 
+        AskForResultsService a = new AskForResultsService(set, 5000);
+        a.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            public void handle(WorkerStateEvent event) {
+                Object result = event.getSource().getValue();
+                if(result instanceof Boolean) {
+                    //If it fails, let the user know, otherwise it doesn't matter
+                    if(!(Boolean)result) {
+                        resultsCallback.handle(-1, null);
+                    }
+                }
+            }
+        });
+
+        a.start();
     }
 
     public void askQuestion(TextField question, LinkedList<TextField> answers) {
@@ -75,7 +95,7 @@ public class MainController implements AppData.Callback {
 
     public void getSessionKey() {
 
-        AskForSessionKeyService thread = new AskForSessionKeyService(10000);
+        AskForSessionKeyService thread = new AskForSessionKeyService(5000);
 
         thread.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             public void handle(WorkerStateEvent event) {
