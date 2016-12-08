@@ -198,6 +198,7 @@ io.on('connection', function (socket){
     });
 	
 	socket.on('enterRoom', function(data){
+        console.log("connected...")
 		enterRoom(data);
 	});
 	

@@ -1,5 +1,6 @@
 package cs339.youvote;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.widget.EditText;
+import android.widget.TextView;
+
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -18,11 +21,14 @@ import org.json.*;
 import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity {
+
+    //private TextView waiting = new TextView(this);
     public final static String EXTRA_MESSAGE = "com.cs339.youvote.MESSAGE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       // waiting.setText("Waiting for Server Response");
 
     }
 
@@ -50,16 +56,18 @@ public class MainActivity extends AppCompatActivity {
 
     //submit code to enter session
     public void submit(View view) throws JSONException {
-        if(true){ //This should be whether the sessionKey is true. Fix it later.
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Waiting for server...");
+        //if(true){ //This should be whether the sessionKey is true. Fix it later.
             Intent intent = new Intent(this, activity_session.class);
             EditText editText = (EditText) findViewById(R.id.session_code);
             String message = editText.getText().toString();
             intent.putExtra(EXTRA_MESSAGE, message);
             boolean tst = sendKey(message);
-            //if(sendKey(message)) {
+            if(sendKey(message)) {
                 startActivity(intent);
-            //}
-        }
+            }
+        //}
     }
 
     //Sends the key
@@ -70,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         Socket conn = null;
         try {
-            conn = IO.socket("http://localhost:1337");
+            conn = IO.socket("http://10.0.2.2:6668/");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
