@@ -72,6 +72,7 @@ var setQA = function(session, Question, Answers){
 	}
 	if(!foundKey){
 		console.log('Key '+session+' not recognized');
+		return false;
 	}
 	else{
 		fs.readFile('qak.json', function(err, data){
@@ -87,6 +88,7 @@ var setQA = function(session, Question, Answers){
 				 console.log(err);
 			}
 		});
+		return true;
 	}
 };
 
@@ -193,9 +195,13 @@ io.on('connection', function (socket){
 		console.log(typeof data);
 		console.log(data);
 		liveSessions.key.push(data.session);
-        setQA(data.session, data.Question, data.Answers);
-		socket.emit('submitConf', JSON.stringify({"conf":"true"}));
-		io.to(data.session).emit('sendQA', data);
+        var toret = setQA(data.session, data.Question, data.Answers);
+		if(toret){
+			socket.emit('submitConf', JSON.stringify({"conf":"true"}));
+			io.to(data.session).emit('sendQA', data);
+		}else{
+			socket.emit('submitConf', JSON.stringify({"conf":"false"}));
+		}
     });
 	
 	socket.on('enterRoom', function(data){
@@ -215,7 +221,7 @@ io.on('connection', function (socket){
 	});
 	
 	socket.on('close', function(data){
-		socket.close(data);
+		socket.leave(data.key);
 		//remove the key from liveSessions.
 		var results;
 		for(var i = 0; i < keys.length; i++){
