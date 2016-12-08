@@ -108,15 +108,16 @@ var getQA = function(key){
 		//emit that to the user.
 }
 
-var enterRoom = function(data){
+var enterRoom = function(data, socket){
 	//if the session for that room is live, send them the Q&A
 		var joined = false;
 		var validKey = false;
+        var toReturn = 0;
 		//Search through all the keys to make sure the current key is valid.
 		for(var j = 0; j < keys.length; j++){
 			if(keys[j] == data.session){
-				socket.emit('keyconf', "true");
 				validKey = true;
+                socket.emit('keyconf', "true");
 				break;
 			}
 		}
@@ -199,7 +200,7 @@ io.on('connection', function (socket){
 	
 	socket.on('enterRoom', function(data){
         console.log("connected...")
-		enterRoom(data);
+		enterRoom(data, socket);
 	});
 	
 	socket.on('answerQA', function(data){
