@@ -2,6 +2,7 @@ package ui.main;
 
 import data.Batch;
 import data.Project;
+import data.Question;
 import fileio.AppData;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -40,10 +41,8 @@ public class MainView extends Application {
 
     public void start(Stage primaryStage) throws Exception {
         System.out.println("This is the main stage");
-        //System.out.println(model.project_settings.toString());
 
         HBox root = new HBox();
-
 
         final GridPane grid = new GridPane();
 
@@ -149,19 +148,16 @@ public class MainView extends Application {
 
         endQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                endQuestionButton.setDisable(true);
-                for(TextField t: answers) {
-                    t.setDisable(false);
-                }
-                questionText.setDisable(false);
-                askQuestionButton.setDisable(false);
-                removeAnswerButton.setDisable(false);
-                addMoreAnswers.setDisable(false);
-                currentSessionKey.setVisible(false);
-                getSessionKeyButton.setDisable(false);
 
                 controller.endQuestion();
 
+            }
+        });
+
+        Button saveDataButton = new Button(model.save_data_button_text);
+        saveDataButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                controller.save();
             }
         });
 
@@ -206,6 +202,17 @@ public class MainView extends Application {
                             a.setTitle("Server Callback");
                             a.show();
                         } else {
+                            endQuestionButton.setDisable(true);
+                            for(TextField t: answers) {
+                                t.setDisable(false);
+                            }
+                            questionText.setDisable(false);
+                            askQuestionButton.setDisable(false);
+                            removeAnswerButton.setDisable(false);
+                            addMoreAnswers.setDisable(false);
+                            currentSessionKey.setVisible(false);
+                            getSessionKeyButton.setDisable(false);
+
                             //move to new window
                             Alert a = new Alert(Alert.AlertType.INFORMATION);
                             a.setContentText("Request Successful: " + response);
@@ -215,12 +222,48 @@ public class MainView extends Application {
                 });
             }
         });
-
-        main.getChildren().addAll(sessionKey, askQuestionButton, endQuestionButton);
+        //TODO fix saving
+        saveDataButton.setDisable(true);
+        main.getChildren().addAll(sessionKey, askQuestionButton, endQuestionButton, saveDataButton);
 
 
         root.getChildren().addAll(grid, main);
         model.stage = primaryStage;
+/*
+        if(model.project_settings != null)
+        {
+            Batch settings = model.project_settings.settings();
+            {
+                String key = settings.getString(Project.settings.SESSION_KEY);
+                if (key != null) {
+                    getSessionKeyButton.setDisable(true);
+                    currentSessionKey.setText(key);
+                }
+            }
+            {
+                Question current = settings.getQuestion(Project.settings.CURRENT_QUESTION);
+                if(current != null)
+                {
+                    questionText.setText(current.question);
+
+                    for(String s: current.allAnswers()) {
+                        //Not possible with this current codebase. Cannot load into answers dynamically
+                        //To add this functionality, all fields would need to be moved to the model
+                    }
+
+                    endQuestionButton.setDisable(false);
+                    for(TextField t: answers) {
+                        t.setDisable(true);
+                    }
+                    questionText.setDisable(true);
+                    askQuestionButton.setDisable(true);
+                    removeAnswerButton.setDisable(true);
+                    addMoreAnswers.setDisable(true);
+
+                }
+            }
+        }*/
+
         model.stage.setScene(new Scene(root));
 
         model.stage.sizeToScene();

@@ -25,6 +25,7 @@ public class MainModel {
     public String current_session_key = "temp";/*project_settings.settings().getString(Project.settings.SESSION_KEY);*/
     public String ask_question_button_text = "Ask a question";
     public String end_question_button_text = "Get results";
+    public String save_data_button_text = "Save Project";
 
     public MainModel(MainView mainView) {
         ui = mainView;

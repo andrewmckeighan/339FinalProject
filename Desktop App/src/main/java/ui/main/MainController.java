@@ -4,8 +4,10 @@ import data.Batch;
 import data.Project;
 import data.Question;
 import fileio.AppData;
+import javafx.application.Platform;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import ui.main.service.AskForResultsService;
 import ui.main.service.AskForSessionKeyService;
@@ -114,6 +116,22 @@ public class MainController implements AppData.Callback {
 
     }
 
+    public void save() {
+        AppData.send().localRequest(new Batch().putBatch(AppData.Local.SAVE_DATA, ui.project_settings.toBatch()),
+                ui.stage,
+                new AppData.Callback() {
+                    public void handle(int type, final Batch response) {
+                        Platform.runLater(new Runnable() {
+                            public void run() {
+                                Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+                                a.setContentText("Save Succuess: " + response.getBoolean(AppData.Local.SUCCESSFUL_SAVE));
+                            }
+                        });
+                    }
+                },
+                AppData.Local.SAVE_FILE);
+    }
+
     public void askForSessionKey(final AppData.Callback anonymous) {
         sessionCallback = anonymous;
     }
@@ -125,4 +143,6 @@ public class MainController implements AppData.Callback {
     public void askForResults(final AppData.Callback anonymous) {
         resultsCallback = anonymous;
     }
+
+
 }

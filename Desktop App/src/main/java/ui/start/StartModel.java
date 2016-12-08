@@ -38,7 +38,7 @@ public class StartModel {
 
 
     public void openProject(Batch project) {
-        if(!Project.verifyProjectStructure(project)) {
+        if(Project.verifyProjectStructure(project)) {
             openNextWindow(new Project(project));
         } else {
            Alert alert = new Alert(Alert.AlertType.ERROR);
