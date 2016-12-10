@@ -92,6 +92,13 @@ public class MainController implements AppData.Callback {
 
         System.out.println("Sending request");
         SendAskQuestionRequest r = new SendAskQuestionRequest(ui.project_settings.settings().getString(Project.settings.SESSION_KEY), q);
+        r.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            public void handle(WorkerStateEvent event) {
+                if((Boolean)(event.getSource().getValue())) {
+                    confirmationCallback.handle(-1, null);
+                }
+            }
+        });
         r.start();
     }
 

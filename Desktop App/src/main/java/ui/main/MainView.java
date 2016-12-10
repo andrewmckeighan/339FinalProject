@@ -20,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.results.ResultsView;
 
 import javax.xml.soap.Text;
 import java.util.ArrayList;
@@ -133,14 +134,6 @@ public class MainView extends Application {
         endQuestionButton.setDisable(true);
         askQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                endQuestionButton.setDisable(false);
-                for(TextField t: answers) {
-                    t.setDisable(true);
-                }
-                questionText.setDisable(true);
-                askQuestionButton.setDisable(true);
-                removeAnswerButton.setDisable(true);
-                addMoreAnswers.setDisable(true);
 
                 controller.askQuestion(questionText, answers);
             }
@@ -150,7 +143,11 @@ public class MainView extends Application {
             public void handle(MouseEvent event) {
 
                 controller.endQuestion();
-
+                try {
+                    new ResultsView().start(new Stage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -178,14 +175,26 @@ public class MainView extends Application {
         });
 
         controller.askForConfirmation(new AppData.Callback() {
-            public void handle(int type, final Batch response) {
+            public void handle(final int type, final Batch response) {
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-                        a.setContentText("Received Response: " + response);
-                        a.setHeaderText(null);
-                        a.setTitle("Server Callback");
-                        a.show();
+                        if(type == -1) {
+                            endQuestionButton.setDisable(false);
+                            for(TextField t: answers) {
+                                t.setDisable(true);
+                            }
+                            questionText.setDisable(true);
+                            askQuestionButton.setDisable(true);
+                            removeAnswerButton.setDisable(true);
+                            addMoreAnswers.setDisable(true);
+
+                        } else {
+                            Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+                            a.setContentText("Received Response: " + response);
+                            a.setHeaderText(null);
+                            a.setTitle("Server Callback");
+                            a.show();
+                        }
                     }
                 });
             }
@@ -214,9 +223,15 @@ public class MainView extends Application {
                             getSessionKeyButton.setDisable(false);
 
                             //move to new window
-                            Alert a = new Alert(Alert.AlertType.INFORMATION);
-                            a.setContentText("Request Successful: " + response);
-                            a.show();
+
+                            try {
+                                new ResultsView(response.getBatch(AppData.Server.Response.Data.RESULTS)).start(new Stage());
+                            } catch (Exception e) {
+
+                                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                                a.setContentText("Request Failed: " + response);
+                                a.show();
+                            }
                         }
                     }
                 });
@@ -268,6 +283,11 @@ public class MainView extends Application {
 
         model.stage.sizeToScene();
         primaryStage.show();
+    }
+
+    public void changeUIStage(boolean on)
+    {
+
     }
 
     public static void main(String[] args) {
