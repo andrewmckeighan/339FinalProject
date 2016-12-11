@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Sends the key
     public boolean sendKey(String inputKey) throws JSONException {
+        isKeyTrue = false;
         //LooperThread thread = new LooperThread();
         JSONObject keyFile = new JSONObject();
         keyFile.put("session", inputKey);
