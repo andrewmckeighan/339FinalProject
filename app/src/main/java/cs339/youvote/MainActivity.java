@@ -24,13 +24,16 @@ import org.json.*;
 import org.w3c.dom.Text;
 
 import java.net.URISyntaxException;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MainActivity extends AppCompatActivity {
 
     //private TextView waiting = new TextView(this);
+    private LinkedBlockingQueue<String> trueQueue = new LinkedBlockingQueue<String>();
     private boolean isKeyTrue = false;
     public final static String EXTRA_MESSAGE = "com.cs339.youvote.MESSAGE";
     private TextView keyTruth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,15 +74,16 @@ public class MainActivity extends AppCompatActivity {
             EditText editText = (EditText) findViewById(R.id.session_code);
             String message = editText.getText().toString();
             intent.putExtra(EXTRA_MESSAGE, message);
-            boolean tst = sendKey(message);
-            if(sendKey(message)) {
+//            boolean tst = sendKey(message);
+            sendKey(message);
+            if(isKeyTrue) {
                 startActivity(intent);
             }
         //}
     }
 
     //Sends the key
-    public boolean sendKey(String inputKey) throws JSONException {
+    public void sendKey(String inputKey) throws JSONException {
         isKeyTrue = false;
         //LooperThread thread = new LooperThread();
         JSONObject keyFile = new JSONObject();
@@ -93,13 +97,18 @@ public class MainActivity extends AppCompatActivity {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        run();
+//        run();
         conn.on("keyconf", new Emitter.Listener(){
             public void call(Object... objects) {
                 Log.w("Main", "Call");
                 if(objects.length > 0) {
                     String resp = (String) objects[0];
                     if(resp.equals("true")){
+                        try {
+                            trueQueue.put("true");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         isKeyTrue = true;
                         Log.w("Main", "Key: True");
 //                        keyTruth.setText("true");
@@ -108,28 +117,40 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         conn.emit("enterRoom" , keyFile);
         //TODO send the key to the server
-        return isKeyTrue;
-    }
-
-    public Handler mHandler;
-
-    public void run() {
-
-
-        mHandler = new Handler() {
-            public void handleMessage(Message msg){
-                while(isKeyTrue!=true);
-                keyTruth.setText("true");
+        boolean answer = false;
+        try {
+            //if (!trueQueue.isEmpty()) {
+                if (trueQueue.take().equals("true")) {
+                    isKeyTrue = true;
+                }
+            //}
+            }catch(InterruptedException e){
+                e.printStackTrace();
             }
-        };
 
-
+//        return answer;
     }
 
-}
-
-class LooperThread extends Thread {
+//    public Handler mHandler;
+//
+//    public void run() {
+//
+//
+//        mHandler = new Handler() {
+//            public void handleMessage(Message msg){
+//                while(isKeyTrue!=true);
+//                keyTruth.setText("true");
+//            }
+//        };
+//
+//
+//    }
 
 }

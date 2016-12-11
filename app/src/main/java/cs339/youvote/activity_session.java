@@ -3,6 +3,9 @@ package cs339.youvote;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat.*;
@@ -19,6 +22,7 @@ import org.json.*;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -26,12 +30,20 @@ import io.socket.emitter.Emitter;
 
 
 public class activity_session extends AppCompatActivity {
+    private LinkedBlockingQueue<String> questionQueue = new LinkedBlockingQueue<String>();
     private String message;
+    private String question;
+    private boolean flag = false;
+    private String[] answers;
+    private ArrayList<String> answerQuestions = new ArrayList<String>();
     private TextView waiting;
     private LinearLayout mLayout;
     private int qIdNum = 0;
     private ArrayList<Integer> answerList = new ArrayList<Integer>();
     private ArrayList<RadioGroup> radioGrpArr = new ArrayList<RadioGroup>();
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +60,20 @@ public class activity_session extends AppCompatActivity {
 //        String[] test2 = {"hi", "there", "How", "Are","You?"};
 //        setQuestions("test", test);
 //        setQuestions("test2", test2);
+//        while(flag == false){
+//            try {
+//                recieveQuestions();
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
     }
-    public void receiveQuestions(){//change TODO
+
+
+
+
+    public void sendQuestions(String key){
         Socket conn = null;
         try {
             conn = IO.socket("http://localhost:1337");
@@ -98,6 +121,7 @@ public class activity_session extends AppCompatActivity {
     }
 
     private TextView createNewTextView(String text) {
+        mLayout.removeView(waiting);
         final LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
         textView.setLayoutParams(lparams);
@@ -108,6 +132,7 @@ public class activity_session extends AppCompatActivity {
     }
 
     private Button createNewQuestions(String question, int btnId) {
+
         LinearLayout layout = (LinearLayout) findViewById(R.id.scrollLayout);
         final LayoutParams lparams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         final RadioButton button = new RadioButton(this);
@@ -152,4 +177,55 @@ public class activity_session extends AppCompatActivity {
         startActivity(intent);
         //TODO
     }
+
+
+    public void recieveQuestions() throws JSONException {
+        //isKeyTrue = false;
+        //LooperThread thread = new LooperThread();
+        JSONObject questionFile = new JSONObject();
+
+        Socket conn = null;
+        try {
+            conn = IO.socket("http://10.0.2.2:6668/");
+            conn.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        conn.on("submitQA", new Emitter.Listener(){
+            public void call(Object... objects) {
+                Log.w("Main", "Call");
+                int length = objects.length;
+                if(objects.length > 0) {
+                    try {
+                        questionQueue.put((String) objects[0]);
+                        for(int i=1; i<length; i++){
+                            questionQueue.put((String) objects[i]);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    question = (String) objects[0];
+                    for(int i=1; i<length; i++){
+                        answerQuestions.add((String) objects[i]);
+                    }
+                }
+
+            }
+
+        });
+        try {
+            question = questionQueue.take();
+            while(!questionQueue.isEmpty()){
+                answerQuestions.add(questionQueue.take());
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        flag = true;
+        setQuestions(question, answerQuestions);
+    }
+
+
+
 }
+
