@@ -22,6 +22,7 @@ import org.json.*;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import io.socket.client.IO;
@@ -56,9 +57,10 @@ public class activity_session extends AppCompatActivity {
         mLayout = (LinearLayout) findViewById(R.id.scrollLayout);
         waiting = createNewTextView("Waiting for questions...");
         mLayout.addView(waiting);
-//        String[] test = {"hi", "there"};
+        ArrayList<String> questArr = new ArrayList<String>();
+        questArr.addAll(Arrays.asList("A", "B", "C", "D", "You Decide!"));
 //        String[] test2 = {"hi", "there", "How", "Are","You?"};
-//        setQuestions("test", test);
+        setQuestions("What Grade Should We Get?", questArr);
 //        setQuestions("test2", test2);
 //        while(flag == false){
 //            try {
