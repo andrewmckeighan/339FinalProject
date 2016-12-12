@@ -1,4 +1,4 @@
-package ui.main;
+package ui.main.service;
 
 import data.Batch;
 import data.Project;

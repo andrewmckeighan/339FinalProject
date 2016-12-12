@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Created by Squiggs on 11/28/2016.
@@ -48,6 +49,14 @@ public class Question implements Serializable{
 
     public String getAnswer(int loc) {
         return this.answers.get(loc);
+    }
+
+    public String[] allAnswers() {
+        String[] allAnswers = new String[answers.size()];
+        for(int x=0; x < answers.size(); x++) {
+            allAnswers[x] = answers.get(x);
+        }
+        return allAnswers;
     }
 
     public void editAnswer(int location, String newAnswer) {

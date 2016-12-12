@@ -1,6 +1,8 @@
 package ui.start;
 
+import fileio.AppData;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 /**
  * Created by Squiggs on 11/28/2016.
@@ -21,9 +24,20 @@ public class StartView extends Application{
     private StartController controller;
     private StartModel model = new StartModel(this);
 
+    @Override
+    public void stop() throws Exception {
+        AppData.send().serverRequest(null, AppData.Server.Request.DISCONNECT);
+    }
+
     public void start(Stage primaryStage) throws Exception {
         controller = new StartController(model);
-        primaryStage.initStyle(StageStyle.UTILITY);
+        primaryStage.setResizable(false);
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent event) {
+                System.out.println("StartView.handle CLOSING");
+                Platform.exit();
+            }
+        });
         model.stage = primaryStage;
 
         VBox mainPane = new VBox();

@@ -64,4 +64,10 @@
         app:layout_constraintBottom_toTopOf="@+id/include"
         android:layout_marginBottom="8dp" />
 
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/truth" />
+
 </android.support.constraint.ConstraintLayout>

@@ -2,6 +2,7 @@ package ui.main;
 
 import data.Batch;
 import data.Project;
+import data.Question;
 import fileio.AppData;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -19,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.results.ResultsView;
 
 import javax.xml.soap.Text;
 import java.util.ArrayList;
@@ -27,23 +29,19 @@ import java.util.LinkedList;
 /**
  * Created by Squiggs on 11/28/2016.
  */
-public class MainView extends Application {
+public class MainView{
     MainModel model = new MainModel(this);
     MainController controller = new MainController(model);
+    private LinkedList<TextField> answers;
 
     public MainView(Project project) {
         model.project_settings = project;
     }
-    public MainView() {
 
-    }
-
-    public void start(Stage primaryStage) throws Exception {
+    public void start() throws Exception {
         System.out.println("This is the main stage");
-        //System.out.println(model.project_settings.toString());
 
         HBox root = new HBox();
-
 
         final GridPane grid = new GridPane();
 
@@ -51,7 +49,7 @@ public class MainView extends Application {
 
             final TextField questionText = new TextField();
             Label answersLabel = new Label(model.answers_label);
-            final LinkedList<TextField> answers = new LinkedList<TextField>();
+            answers = new LinkedList<TextField>();
             final Button addMoreAnswers = new Button(model.add_more_answers_button_label);
             final Button removeAnswerButton = new Button(model.remove_answer_button_label);
 
@@ -134,43 +132,33 @@ public class MainView extends Application {
         endQuestionButton.setDisable(true);
         askQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                endQuestionButton.setDisable(false);
-                for(TextField t: answers) {
-                    t.setDisable(true);
-                }
-                questionText.setDisable(true);
-                askQuestionButton.setDisable(true);
-                removeAnswerButton.setDisable(true);
-                addMoreAnswers.setDisable(true);
-
                 controller.askQuestion(questionText, answers);
             }
         });
 
         endQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                endQuestionButton.setDisable(true);
-                for(TextField t: answers) {
-                    t.setDisable(false);
-                }
-                questionText.setDisable(false);
-                askQuestionButton.setDisable(false);
-                removeAnswerButton.setDisable(false);
-                addMoreAnswers.setDisable(false);
-                currentSessionKey.setVisible(false);
-                getSessionKeyButton.setDisable(false);
-
                 controller.endQuestion();
             }
         });
 
+        Button saveDataButton = new Button(model.save_data_button_text);
+        saveDataButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                controller.save();
+            }
+        });
+
         controller.askForSessionKey(new AppData.Callback() {
-            public void handle(int type, final Batch response) {
+            public void handle(final int type, final Batch response) {
                 Platform.runLater(new Runnable() {
                     public void run() {
                         String session = response.getString(AppData.Server.Response.Data.SESSION_KEY);
                         currentSessionKey.setText("Key:" + session);
                         currentSessionKey.setVisible(true);
+
+                        if(type == -1)
+                            getSessionKeyButton.setDisable(false);
                     }
                 });
 
@@ -178,45 +166,115 @@ public class MainView extends Application {
         });
 
         controller.askForConfirmation(new AppData.Callback() {
-            public void handle(int type, final Batch response) {
+            public void handle(final int type, final Batch response) {
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-                        a.setContentText("Received Response: " + response);
-                        a.setHeaderText(null);
-                        a.setTitle("Server Callback");
-                        a.show();
+                        if(type == -1) {
+                            endQuestionButton.setDisable(false);
+                            for(TextField t: answers) {
+                                t.setDisable(true);
+                            }
+                            questionText.setDisable(true);
+                            askQuestionButton.setDisable(true);
+                            removeAnswerButton.setDisable(true);
+                            addMoreAnswers.setDisable(true);
+
+                        } else {
+                            Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+                            a.setContentText("Received Response: " + response);
+                            a.setHeaderText(null);
+                            a.setTitle("Server Callback");
+                            a.show();
+                        }
                     }
                 });
             }
         });
 
         controller.askForResults(new AppData.Callback() {
-            public void handle(int type, final Batch response) {
+            public void handle(final int type, final Batch response) {
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-                        a.setContentText("Received Response: " + response);
-                        a.setHeaderText(null);
-                        a.setTitle("Server Callback");
-                        a.show();
+                        if(type == -1 || response == null) {
+                            Alert a = new Alert(Alert.AlertType.ERROR);
+                            a.setContentText("Request Failed: " + type + " " + response);
+                            a.setHeaderText(null);
+                            a.setTitle("Server Callback");
+                            a.show();
+                        } else {
+                            endQuestionButton.setDisable(true);
+                            for(TextField t: answers) {
+                                t.setDisable(false);
+                            }
+                            questionText.setDisable(false);
+                            askQuestionButton.setDisable(false);
+                            removeAnswerButton.setDisable(false);
+                            addMoreAnswers.setDisable(false);
+                            currentSessionKey.setVisible(false);
+                            getSessionKeyButton.setDisable(false);
+
+                            //move to new window
+
+                            try {
+                                new ResultsView(response.getBatch(AppData.Server.Response.Data.RESULTS), MainView.this.model.current_num_questions).start(new Stage());
+                                System.out.println("MainView.run response.getBatch(AppData.Server.Response.Data.RESULTS)=" + response.getBatch(AppData.Server.Response.Data.RESULTS));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                                a.setContentText("Request Failed: " + response);
+                                a.show();
+                            }
+                        }
                     }
                 });
             }
         });
-
-        main.getChildren().addAll(sessionKey, askQuestionButton, endQuestionButton);
+        //TODO fix saving
+        saveDataButton.setDisable(true);
+        main.getChildren().addAll(sessionKey, askQuestionButton, endQuestionButton, saveDataButton);
 
 
         root.getChildren().addAll(grid, main);
-        model.stage = primaryStage;
+        model.stage = new Stage();
+/*
+        if(model.project_settings != null)
+        {
+            Batch settings = model.project_settings.settings();
+            {
+                String key = settings.getString(Project.settings.SESSION_KEY);
+                if (key != null) {
+                    getSessionKeyButton.setDisable(true);
+                    currentSessionKey.setText(key);
+                }
+            }
+            {
+                Question current = settings.getQuestion(Project.settings.CURRENT_QUESTION);
+                if(current != null)
+                {
+                    questionText.setText(current.question);
+
+                    for(String s: current.allAnswers()) {
+                        //Not possible with this current codebase. Cannot load into answers dynamically
+                        //To add this functionality, all fields would need to be moved to the model
+                    }
+
+                    endQuestionButton.setDisable(false);
+                    for(TextField t: answers) {
+                        t.setDisable(true);
+                    }
+                    questionText.setDisable(true);
+                    askQuestionButton.setDisable(true);
+                    removeAnswerButton.setDisable(true);
+                    addMoreAnswers.setDisable(true);
+
+                }
+            }
+        }*/
+
         model.stage.setScene(new Scene(root));
 
         model.stage.sizeToScene();
-        primaryStage.show();
+        model.stage.show();
     }
 
-    public static void main(String[] args) {
-        MainView.launch(MainView.class);
-    }
 }
