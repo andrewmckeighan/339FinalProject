@@ -1,7 +1,7 @@
 /**
  * Created by mrjoshte on 12/1/2016.
  */
- 
+
 var express = require('express');
 var sockets = require('socket.io');
 
@@ -17,8 +17,7 @@ var liveSessions = {'key':[]};
 
 var fullqak = [];
 
-//for each key there is also a list of numbers, which are answers to questions.
-var answers = [[]];
+var answers = {};
 
 //---------------------Functions--------------------------
 //Generates and saves a random key used for authentication
@@ -36,7 +35,7 @@ var generatekey = function(){
         } else{
 			console.log("New key created.");
             //getKeys();
-			
+
         }
     });
     return text;
@@ -62,7 +61,7 @@ var setQA = function(session, Question, Answers){
 	//qak is Question,Answer,Key combination
 	var qak = {};
 	for(var i = 0; i < keys.length; i ++){
-		if(keys[i] == session){
+		if(sessionEquals(keys[i], session)){
 			qak.session = session;
 			qak.Question = Question;
 			qak.Answers = Answers;
@@ -101,8 +100,8 @@ var getQA = function(key){
 			}
 		});
 	for(var i = 0; i < fullqak.length; i++){
-		if(fullqa[i].session == key){
-			return fullqa[i];
+		if(sessionEquals(fullqak[i].session, key)){
+			return JSON.stringify(fullqak[i]);
 		}
 	}
 	return null;
@@ -117,7 +116,7 @@ var enterRoom = function(data, socket){
         var toReturn = 0;
 		//Search through all the keys to make sure the current key is valid.
 		for(var j = 0; j < keys.length; j++){
-			if(keys[j] == data.session){
+			if(sessionEquals(keys[j], data.session)){
 				validKey = true;
                 socket.emit('keyconf', "true");
 				break;
@@ -126,7 +125,7 @@ var enterRoom = function(data, socket){
 		//Searching through all the live session keys to see if this key session is live yet..
 		if(validKey){
 			for(var i = 0; i < liveSessions.key.length; i++){
-				if(liveSessions.key[i] == data.session){
+				if(sessionEquals(liveSessions.key[i], data.session)){
 					socket.join(data.session);
 					joined = true;
 					break;
@@ -134,7 +133,8 @@ var enterRoom = function(data, socket){
 			}
 			if(joined){
 				var qa = getQA(data.session);
-				socket.emit('sendQA', qa);
+                console.log(qa + " ----------------------------------");
+                socket.emit('sendQA', qa);
 			}else{
 				socket.emit('notSuccessful', false);
 			}
@@ -165,7 +165,7 @@ var initializeServer = function(startServer) {
             //Start socket server
             io.listen(server);
             console.log('Socket server running on port ' + port);
-			
+
         });
    // };
     //initializeServer();
@@ -180,17 +180,17 @@ io.on('error', function(socket){
 	console.log("There was an error.");
 });
 io.on('connection', function (socket){
-	
+
 	console.log("New Connection");
 	socket.on('getKey', function(){
 		var text = generatekey();
 		socket.join(text);
 		console.log("Key:"+text);
 		var json = {"session":text};
-		
+
         socket.emit('sendKey', JSON.stringify(json, null, 4));
     });
-	
+
 	socket.on('submitQA', function(data){
 		console.log(typeof data);
 		console.log(data);
@@ -203,35 +203,47 @@ io.on('connection', function (socket){
 			socket.emit('submitConf', JSON.stringify({"conf":"false"}));
 		}
     });
-	
+
 	socket.on('enterRoom', function(data){
         console.log("connected...")
 		enterRoom(data, socket);
 	});
-	
+
 	socket.on('answerQA', function(data){
-		var thisKey = data.session;
-		var answerNum = data.Answer;
-		for(var j = 0; j < keys.length; j++){
-			if(keys[i] == data.session){
-				answers[i].push(data.Answer);
-			}
-		}
+        console.log("session-");
+        var ans = data.Answer + 1;
+        var sessionAnswers = answers[data.session.toUpperCase()];
+        if(!sessionAnswers) {
+            sessionAnswers = answers[data.session.toUpperCase()] = {};
+        }
+        if(isNaN(sessionAnswers[ans+""])){
+            sessionAnswers[ans+""] = 0;
+        }
+		sessionAnswers[ans+""]++;
+        console.log(sessionAnswers);
 		//Logic here in order to answer a question.
 	});
-	
+
 	socket.on('close', function(data){
-		socket.leave(data.key);
-		//remove the key from liveSessions.
-		var results;
-		for(var i = 0; i < keys.length; i++){
-			if(keys[i] == data.session){
-				liveSessions.key.slice(i, 1);
-				results = answers[i];
-			}
-		}
 		//gather the data that will be sent back to the desktop.
 		//results.session, results.conf, results.results
-		socket.emit('sendResults', JSON.stringify({'Answers':results}, null, 4));
+        console.log(answers);
+        console.log(data);
+        console.log(answers[data.session.toUpperCase()]);
+		socket.emit('sendResults', JSON.stringify({answers:answers[data.session.toUpperCase()]}, null, 4));
+        socket.leave(data.session);
+        console.log('close');
+        //remove the key from liveSessions.
 	});
 });
+
+io.on("disconnect", function(){
+    console.log("disconnect");
+});
+
+function sessionEquals(session1, session2){
+    if(!session1 || !session2){
+        return false;
+    }
+    return session1.toUpperCase() == session2.toUpperCase();
+}

@@ -53,7 +53,7 @@ public class StartModel {
         Platform.runLater(new Runnable() {
             public void run() {
                 try {
-                    new MainView(project).start(new Stage());
+                    new MainView(project).start();
 
                     stage.close();
                 } catch(Exception e) {

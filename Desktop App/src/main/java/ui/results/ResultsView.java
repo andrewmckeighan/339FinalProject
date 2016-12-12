@@ -1,6 +1,5 @@
 package ui.results;
 
-import com.sun.org.apache.regexp.internal.RE;
 import data.Batch;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -16,16 +15,11 @@ import javafx.stage.Stage;
 public class ResultsView extends Application
 {
     private Batch results;
+    private int defaultSize;
 
-    public ResultsView() {
-        results = new Batch()
-            .putInteger("1", 2)
-            .putInteger("2", 5)
-            .putInteger("3", 3);
-    }
-
-    public ResultsView(Batch results) {
+    public ResultsView(Batch results, int defaultSize) {
         this.results = results;
+        this.defaultSize = defaultSize;
     }
 
     public void start(Stage primaryStage) throws Exception {
@@ -41,13 +35,14 @@ public class ResultsView extends Application
         XYChart.Series<String, Number> ser = new XYChart.Series<String, Number>();
         ser.setName("Number of Responses");
 
-        for(int x = 1; true; x++) {
+        System.out.println("ResultsView.start results=" + results);
+        for(int x = 1; x <= defaultSize; x++) {
             String key = ""+x;
             if(results.containsKey(key)) {
                 Number num = (Number) results.get(key);
                 ser.getData().add(new XYChart.Data<String, Number>(key, num));
             } else {
-                break;
+                ser.getData().add(new XYChart.Data<String, Number>(key, 0));
             }
         }
 

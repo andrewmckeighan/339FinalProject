@@ -117,6 +117,7 @@ public class AppData {
 
         server.on(serverEventName, new SocketConnection.Listener() {
             public void call(Batch object) {
+                System.out.println("AppData.call object=" + object);
                 listener.handle(serverEventType, object);
             }
         });

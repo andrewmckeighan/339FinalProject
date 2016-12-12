@@ -29,18 +29,16 @@ import java.util.LinkedList;
 /**
  * Created by Squiggs on 11/28/2016.
  */
-public class MainView extends Application {
+public class MainView{
     MainModel model = new MainModel(this);
     MainController controller = new MainController(model);
+    private LinkedList<TextField> answers;
 
     public MainView(Project project) {
         model.project_settings = project;
     }
-    public MainView() {
 
-    }
-
-    public void start(Stage primaryStage) throws Exception {
+    public void start() throws Exception {
         System.out.println("This is the main stage");
 
         HBox root = new HBox();
@@ -51,7 +49,7 @@ public class MainView extends Application {
 
             final TextField questionText = new TextField();
             Label answersLabel = new Label(model.answers_label);
-            final LinkedList<TextField> answers = new LinkedList<TextField>();
+            answers = new LinkedList<TextField>();
             final Button addMoreAnswers = new Button(model.add_more_answers_button_label);
             final Button removeAnswerButton = new Button(model.remove_answer_button_label);
 
@@ -134,20 +132,13 @@ public class MainView extends Application {
         endQuestionButton.setDisable(true);
         askQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-
                 controller.askQuestion(questionText, answers);
             }
         });
 
         endQuestionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-
                 controller.endQuestion();
-                try {
-                    new ResultsView().start(new Stage());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
         });
 
@@ -225,9 +216,10 @@ public class MainView extends Application {
                             //move to new window
 
                             try {
-                                new ResultsView(response.getBatch(AppData.Server.Response.Data.RESULTS)).start(new Stage());
+                                new ResultsView(response.getBatch(AppData.Server.Response.Data.RESULTS), MainView.this.model.current_num_questions).start(new Stage());
+                                System.out.println("MainView.run response.getBatch(AppData.Server.Response.Data.RESULTS)=" + response.getBatch(AppData.Server.Response.Data.RESULTS));
                             } catch (Exception e) {
-
+                                e.printStackTrace();
                                 Alert a = new Alert(Alert.AlertType.INFORMATION);
                                 a.setContentText("Request Failed: " + response);
                                 a.show();
@@ -243,7 +235,7 @@ public class MainView extends Application {
 
 
         root.getChildren().addAll(grid, main);
-        model.stage = primaryStage;
+        model.stage = new Stage();
 /*
         if(model.project_settings != null)
         {
@@ -282,15 +274,7 @@ public class MainView extends Application {
         model.stage.setScene(new Scene(root));
 
         model.stage.sizeToScene();
-        primaryStage.show();
+        model.stage.show();
     }
 
-    public void changeUIStage(boolean on)
-    {
-
-    }
-
-    public static void main(String[] args) {
-        MainView.launch(MainView.class);
-    }
 }
